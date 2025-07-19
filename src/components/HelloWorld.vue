@@ -4,7 +4,6 @@ import { ref } from 'vue'
 defineProps({
   msg: String,
 })
-
 const count = ref(0)
 </script>
 
@@ -25,6 +24,7 @@ const count = ref(0)
       >create-vue</a
     >, the official Vue + Vite starter
   </p>
+
   <p>
     Learn more about IDE Support for Vue in the
     <a
