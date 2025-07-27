@@ -15,7 +15,7 @@ const types = ['Lecture', 'Lab', 'Project', 'All']
 
 </script>
 <template>
-    <div class="flex">
+    <div class="flex realative">
     <aside class="w-65 bg-white text-gray-800 min-h-screen shadow-md p-5">
         <profile-card />
         <h2 class="text-2xl font-bold mb-6">Menu</h2>
@@ -104,7 +104,7 @@ const types = ['Lecture', 'Lab', 'Project', 'All']
         </ul>
     </aside>
     <div v-if="selectedSubject"
-         class="w-full sm:w-[400px] bg-white border-l border-gray-300 p-6 shadow-inner">
+         class="absolute left-65 top-15 z-10 w-full sm:w-[400px] bg-white border-l border-gray-300 p-6 shadow-xl">
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-lg font-bold truncate">{{ selectedSubject }}</h3>
         <button @click="selectedSubject = null" class="text-gray-500 hover:text-black text-xl" aria-label="Close panel">
