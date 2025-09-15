@@ -1,46 +1,55 @@
 <script setup>
+import { ref } from "vue"
+import LoginSlider from "../components/LoginSlider.vue"
+
+// slides ที่ส่งให้ LoginSlider
+const slides = ref([
+  { id: 1, image: "/src/assets/login1.png",},
+  { id: 2, image: "/src/assets/login2.png",},
+  { id: 3, image: "/src/assets/login3.png",},
+  { id: 4, image: "/src/assets/login4.png",},
+])
 </script>
 
 <template>
-  <div class="flex justify-between">
-    <!-- Left Block -->
-    <div class="h-screen flex items-center justify-center w-3/5 bg-sky-400">
-      <!-- เพิ่ม class "flex-col" ตรงนี้ครับ -->
-      <div class="flex flex-col items-center">
-        <h1 class="block text-2xl font-bold mb-2">Welcome to CY PROJECT!</h1>
-        <p class="text-gray-600">This is the place you are going to login.</p>
-      </div>
+  <div class="flex h-screen">
+    <!-- Left Block (Slider) -->
+    <div class="w-3/5 h-full">
+      <LoginSlider :slides="slides" class="h-full w-full" />
     </div>
 
-    <!-- Right Block -->
-    <div class="flex flex-col bg-white minh-full w-2/5 items-center justify-center">
-      <img
-        src="../assets/1.-official-logo-2022-26.png"
-        alt="Umamusume Logo"
-      />
+    <!-- Right Block (Login Form) -->
+    <div class="w-2/5 flex flex-col justify-center items-center bg-white px-8 h-full">
+      <!-- Logo -->
+      <img src="../assets/KKU_LOGO.png" alt="KKU Logo" />
 
-      <form
-        class="block auth-form bg-white p-8 rounded-xl shadow-lg max-w-md w-full mx-auto mt-10 border border-blue-100 "
-      >
-        <div class="input-group mb-4">
+      <!-- Login Form -->
+      <form class="bg-white p-8 rounded-xl shadow-lg max-w-md w-full border border-blue-100">
+        <!-- Username -->
+        <div class="mb-4">
           <input
             type="text"
             placeholder="Username"
-            class="input-field w-full px-4 py-3 rounded-lg border border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition duration-200"
+            class="w-full px-4 py-3 rounded-lg border border-blue-200
+                   focus:border-blue-500 focus:ring-2 focus:ring-blue-200
+                   focus:outline-none transition duration-200"
           />
         </div>
 
-        <div class="input-group mb-4">
+        <!-- Password -->
+        <div class="mb-4">
           <input
             type="password"
             placeholder="Password"
-            class="input-field w-full px-4 py-3 rounded-lg border border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition duration-200"
+            class="w-full px-4 py-3 rounded-lg border border-blue-200
+                   focus:border-blue-500 focus:ring-2 focus:ring-blue-200
+                   focus:outline-none transition duration-200"
           />
         </div>
 
         <!-- Remember + Forgot -->
-        <div class="options-row flex justify-between items-center mb-6">
-          <label class="remember-me flex items-center text-blue-800">
+        <div class="flex justify-between items-center mb-6">
+          <label class="flex items-center text-blue-800">
             <input
               type="checkbox"
               class="mr-2 rounded text-blue-500 focus:ring-blue-400"
@@ -49,16 +58,18 @@
           </label>
           <a
             href="#"
-            class="forgot-link text-blue-500 hover:text-blue-700 transition duration-200"
-            >Forgot password?</a
+            class="text-blue-500 hover:text-blue-700 transition duration-200"
           >
+            Forgot password?
+          </a>
         </div>
 
-        <div class="button-group space-y-4">
+        <!-- Buttons -->
+        <div class="space-y-4">
           <router-link to="/" class="block">
             <button
               type="submit"
-              class="btn primary-btn w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-lg transition duration-200 shadow hover:shadow-md"
+              class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-lg transition duration-200 shadow hover:shadow-md"
             >
               Login
             </button>
@@ -67,15 +78,16 @@
           <router-link to="/signup" class="block">
             <button
               type="button"
-              class="btn secondary-btn w-full bg-white border border-blue-500 text-blue-500 hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition duration-200"
+              class="w-full bg-white border border-blue-500 text-blue-500 hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition duration-200"
             >
               Sign Up
             </button>
           </router-link>
+        </div>
 
-          <div class="text-center py-3">
-            <label class="text-gray-500 text-sm">or login with</label>
-          </div>
+        <!-- Divider -->
+        <div class="text-center py-3">
+          <label class="text-gray-500 text-sm">or login with</label>
         </div>
       </form>
     </div>

@@ -5,5 +5,6 @@ import { RouterView, RouterLink } from 'vue-router';
     <div class="bg-blue-500">
       <RouterView />
       <RouterLink to="/login"></RouterLink>
+      
     </div>
   </template>

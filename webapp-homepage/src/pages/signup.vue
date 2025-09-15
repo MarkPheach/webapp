@@ -3,96 +3,141 @@ import { ref } from 'vue';
 import router from '../router';
 import { useUserStore } from '../stores/User.js';
 
-const isuupdate = ref(false);
-const userid    = ref('');
-const userpassword  = ref('');
+const userid = ref('');
+const userpassword = ref('');
 const useremail = ref('');
-const userfact  = ref('');
+const userfact = ref('');
+const confirmPassword = ref('');
 
 const userStore = useUserStore();
-const updatedsignupuser = () => {
-    console.log("Signup user:", userid.value, useremail.value, userfact.value);
-    isuupdate.value = true;
-    // Store user data in Pinia store
-    const userdata = {
-        id: userid.value,
-        email: useremail.value,
-        password: userpassword.value,
-        fact: userfact.value
-    }
-    userStore.setUser(userdata);
-    router.push('/login');
-}
 
-
+const updatedsignupuser = (e) => {
+  e.preventDefault();
+  if (userpassword.value !== confirmPassword.value) {
+    alert("รหัสผ่านไม่ตรงกัน");
+    return;
+  }
+  const userdata = {
+    id: userid.value,
+    email: useremail.value,
+    password: userpassword.value,
+    fact: userfact.value,
+  };
+  userStore.setUser(userdata);
+  router.push('/login');
+};
 </script>
 
 <template>
-  <div class="container">
+  <div class="flex justify-between">
     <!-- Left Block -->
-    <div class="left-block">
-      <h1>Welcome to CY PROJECT!</h1>
-      <p>please register</p>
+    <div class="h-screen flex items-center justify-center w-3/5 bg-sky-400">
+      <div class="flex flex-col items-center text-white">
+        <h1 class="block text-2xl font-bold mb-2">Welcome to CY PROJECT!</h1>
+        <p class="opacity-90">This is the place you are going to Sign Up.</p>
+      </div>
     </div>
 
     <!-- Right Block -->
-    <div class="right-block">
-      <div class="auth-form">
-        <button class="back-btn"><router-link to="/login">← Back</router-link></button>
+    <div class="flex flex-col bg-white min-h-full w-2/5 items-center justify-center relative">
+      <!-- Back Button -->
+      <router-link
+        to="/login"
+        class="absolute top-6 left-6 text-blue-500 hover:text-blue-700 transition duration-200"
+      >
+        ← Back
+      </router-link>
 
-        <h2 style="margin-bottom: 20px;">Sign Up</h2>
+      <!-- Form -->
+      <form
+        @submit="updatedsignupuser"
+        class="block bg-white p-8 rounded-xl shadow-lg max-w-md w-full mx-auto mt-10 border border-blue-100"
+      >
+        <h2 class="text-2xl font-bold text-center mb-6">Sign Up</h2>
 
-        <form>
-          <div class="input-group">
-            <label for="studentid">รหัสนักศึกษา</label>
-            <input type="text" v-model="userid" class="input-field" required />
+        <!-- Student ID -->
+        <div class="mb-4">
+          <input
+            type="text"
+            v-model="userid"
+            placeholder="รหัสนักศึกษา"
+            class="w-full px-4 py-3 rounded-lg border border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition duration-200"
+            required
+          />
+        </div>
+
+        <!-- KKUMail -->
+        <div class="mb-4">
+          <input
+            type="email"
+            v-model="useremail"
+            placeholder="KKUMail"
+            class="w-full px-4 py-3 rounded-lg border border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition duration-200"
+            required
+          />
+        </div>
+
+        <!-- Password -->
+        <div class="mb-4">
+          <input
+            type="password"
+            v-model="userpassword"
+            placeholder="รหัสผ่าน"
+            class="w-full px-4 py-3 rounded-lg border border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition duration-200"
+            required
+          />
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="mb-4">
+          <input
+            type="password"
+            v-model="confirmPassword"
+            placeholder="ยืนยันรหัสผ่าน"
+            class="w-full px-4 py-3 rounded-lg border border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition duration-200"
+            required
+          />
+        </div>
+
+        <!-- Select Major -->
+        <div class="mb-6">
+          <select
+            v-model="userfact"
+            class="w-full px-4 py-3 rounded-lg border border-blue-200 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition duration-200"
+            required
+          >
+            <option value="" disabled selected>เลือกสาขา</option>
+            <option value="CS">CS</option>
+            <option value="CY">CY</option>
+            <option value="AI">AI</option>
+            <option value="IT">IT</option>
+            <option value="GIS">GIS</option>
+          </select>
+        </div>
+
+        <!-- Buttons -->
+        <div class="space-y-4">
+          <button
+            type="submit"
+            class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-lg transition duration-200 shadow hover:shadow-md"
+          >
+            Sign Up
+          </button>
+
+          <router-link to="/login" class="block">
+            <button
+              type="button"
+              class="w-full bg-white border border-blue-500 text-blue-500 hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition duration-200"
+            >
+              Already have an account? Login
+            </button>
+          </router-link>
+
+          <div class="text-center py-3">
+            <label class="text-gray-500 text-sm">or sign up with</label>
           </div>
-
-          <div class="input-group">
-            <label for="kkumail">KKUMail</label>
-            <input type="email" v-model="useremail" class="input-field" required />
-          </div>
-
-          <div class="input-group">
-            <label for="password">รหัสผ่าน</label>
-            <input type="password" v-model="userpassword" class="input-field" required />
-          </div>
-
-          <div class="input-group">
-            <label for="confirm-password">ยืนยันรหัสผ่าน</label>
-            <input type="password" class="input-field" required />
-          </div>
-
-          <div class="input-group">
-            <label for="major">เลือกสาขา</label>
-            <select v-model="userfact" id="major" name="major" class="input-field" required>
-              <option value="" disabled selected>เลือกสาขา</option>
-              <option value="CS">CS</option>
-              <option value="CY">CY</option>
-              <option value="AI">AI</option>
-              <option value="IT">IT</option>
-              <option value="GIS">GIS</option>
-            </select>
-          </div>
-
-          <div class="button-group">
-              <button @click="updatedsignupuser" type="submit" class="btn primary-btn"> สมัคร </button>
-          </div>
-          <!-- div>
-            user store
-            <div v-if="userStore.user">
-            <div>id: {{ userStore.user.id }}</div>
-            <div>email: {{ userStore.user.email }}</div>
-            <div>fact: {{ userStore.user.fact }}</div>
-            <div>password: {{ userStore.user.password }}</div>
-                </div>
-                <div v-else>
-                    <p>No user yet</p>
-                </div>
-            </div -->
-            <label >or sign up with</label>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   </div>
 </template>
