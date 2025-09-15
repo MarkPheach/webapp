@@ -2,6 +2,15 @@
 import { ref } from 'vue';
 import router from '../router';
 import { useUserStore } from '../stores/User.js';
+import LoginSlider from "../components/LoginSlider.vue"
+
+// slides ที่ส่งให้ LoginSlider
+const slides = ref([
+  { id: 1, image: "/src/assets/login1.png" },
+  { id: 2, image: "/src/assets/login2.png" },
+  { id: 3, image: "/src/assets/login3.png" },
+  { id: 4, image: "/src/assets/login4.png" },
+])
 
 const userid = ref('');
 const userpassword = ref('');
@@ -31,15 +40,20 @@ const updatedsignupuser = (e) => {
 <template>
   <div class="flex justify-between">
     <!-- Left Block -->
-    <div class="h-screen flex items-center justify-center w-3/5 bg-sky-400">
-      <div class="flex flex-col items-center text-white">
-        <h1 class="block text-2xl font-bold mb-2">Welcome to CY PROJECT!</h1>
-        <p class="opacity-90">This is the place you are going to Sign Up.</p>
-      </div>
+    <div class="w-3/5 h-screen">
+      <LoginSlider :slides="slides" class="h-full w-full" />
     </div>
 
     <!-- Right Block -->
     <div class="flex flex-col bg-white min-h-full w-2/5 items-center justify-center relative">
+            <div class="w-1/33 absolute inset-0 flex">
+        <div
+          v-for="i in 4"
+          :key="i"
+          class="flex-1"
+          :class="i % 2 === 0 ? 'bg-blue-400' : 'bg-white'"
+        ></div>
+      </div>
       <!-- Back Button -->
       <router-link
         to="/login"
