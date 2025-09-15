@@ -56,7 +56,7 @@ function submitPost() {
         12a
       </div>
       <div>
-        <div class="font-semibold text-lg">ชื่อผู้โพสต์</div>
+        <div class="font-semibold text-lg"> Nameless </div>
         <div class="flex space-x-2 mt-1">
           <button
             v-for="type in ['question', 'general']"

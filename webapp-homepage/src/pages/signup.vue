@@ -10,6 +10,9 @@ const slides = ref([
   { id: 2, image: "/src/assets/login2.png" },
   { id: 3, image: "/src/assets/login3.png" },
   { id: 4, image: "/src/assets/login4.png" },
+  { id: 5, image: "/src/assets/sensei_Umazing.png"},
+  { id: 6, image: "/src/assets/sensei_Omai wa zako.png" },
+  { id: 7, image: "/src/assets/senseI_chatGPT.png" },
 ])
 
 const userid = ref('');

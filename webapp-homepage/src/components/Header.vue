@@ -1,20 +1,23 @@
 <script setup>
 import { ref } from 'vue';
-
+import 'primeicons/primeicons.css'
 const showDropdown = ref(false);
 
 </script>
 <template>
   <div>
     <header
-      class="flex items-center justify-between navbar bg-blue-500 text-white fixed top-0 left-0 w-full z-50 px-4 h-15">
-      <div class="flex-1 flex items-center">
-        <img src="../assets/kku_logo.svg" alt="Logo" class="h-10 w-auto mr-3" />
-        <h1 class="text-xl font-bold">
-          College of Computing, Subject Forum | ฟอรัมวิทยาลัยการคอมพิวเตอร์
-        </h1>
-      </div>
-
+      class="flex items-center justify-between navbar bg-sky-500 text-white fixed top-0 left-0 w-full z-50 px-4 h-15">
+       <img src="../assets/CU_DEPT_LOGO.png" alt="Logo" class="h-12 w-30 mr-3 rounded-2xl" />
+      <div class="relative flex items-center justify-center flex-col">
+        <i  class="pi pi-search absolute left-3 text-black"></i>
+        <input
+          type="text"
+          placeholder="ค้นหารายวิชา"
+          class="w-full max-w-xs input input-bordered rounded-2xl bg-sky-200 pl-10 text-black"
+         />
+        </div>
+        
       <div class="flex items-center gap-4 ml-auto mr-6 relative">
         <!-- ปุ่ม dropdown -->
         <button @click="showDropdown = !showDropdown"
