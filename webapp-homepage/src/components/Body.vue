@@ -2,11 +2,12 @@
 import { ref } from 'vue'
 import Sidebar from '../components/Sidebar.vue'
 import BeforePost from './BeforePost.vue'
+import Shop from './Shop.vue' // เพิ่ม import
 import { usePostStore } from '../stores/postStore'
 
 const showBeforePost = ref(false)
+const showShop = ref(false)
 const postStore = usePostStore()
-
 </script>
 
 <template>
@@ -15,11 +16,22 @@ const postStore = usePostStore()
     <div class="w-64 bg-white shadow-2xl">
       <Sidebar />
     </div>
-
     <!-- Main Content -->
     <div class="bg-sky-200 flex-1 flex justify-center items-start pt-12 relative">
       <div class="mb-15 bg-white w-full max-w-5xl p-8 rounded-2xl shadow-2xl min-h-[800px]">
-        <!-- Floating Action Button -->
+        <!-- Floating Action Button: Shop -->
+        <button
+          @click="showShop = !showShop"
+          class="fixed right-12 bottom-28 z-50 bg-yellow-200 hover:bg-yellow-300 text-yellow-700 rounded-full p-4 shadow-lg transition-colors"
+          aria-label="เปิดร้านค้า"
+          type="button"
+        >
+          <!-- ไอคอนร้านค้า (shopping bag) -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14l1 12H4L5 8zm7-5a3 3 0 00-3 3v2h6V6a3 3 0 00-3-3z" />
+          </svg>
+        </button>
+        <!-- Floating Action Button: Pencil -->
         <button
           @click="showBeforePost = true"
           class="fixed right-12 bottom-12 z-50 bg-gray-200 hover:bg-gray-300 text-gray-600 rounded-full p-4 shadow-lg transition-colors"
@@ -31,8 +43,11 @@ const postStore = usePostStore()
           </svg>
         </button>
 
-        <!-- รายการโพสต์ -->
-        <div class="mt-10 space-y-6">
+        <!-- แสดงหน้าร้านค้าเมื่อ showShop เป็น true -->
+        <Shop v-if="showShop" />
+
+        <!-- รายการโพสต์ (ซ่อนเมื่อเปิดร้านค้า) -->
+        <div v-if="!showShop" class="mt-10 space-y-6">
           <div
             v-for="(post, index) in postStore.posts"
             :key="index"
@@ -74,7 +89,6 @@ const postStore = usePostStore()
         >
           &times;
         </button>
-
         <BeforePost @close="showBeforePost = false" />
       </div>
     </div>
