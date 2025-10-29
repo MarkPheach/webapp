@@ -10,10 +10,10 @@ const showDropdown = ref(false);
     <header class="flex items-center justify-between bg-sky-500 text-white fixed top-0 left-0 w-full z-50 px-4 h-1/10">
 
       <!-- โลโก้ -->
-      <img src="../assets/CU_DEPT_LOGO.png" alt="Logo" class="9/10 w-auto mr-3 rounded-2xl" />
+      <img src="../assets/CU_DEPT_LOGO.png" alt="Logo" class="8/10 w-auto mr-3 rounded-2xl" />
 
       <!-- กลุ่มค้นหา + กรองรายวิชา -->
-      <div class="flex items-center gap-3 h-full w-1/2 text-xl font-bold">
+      <div class="flex items-center gap-3 h-full w-1/2 text-1/2xl font-bold">
         <!-- ค้นหา -->
         <div class="relative flex items-center ml-15 w-1/2 h-full">
           <i class="pi pi-search absolute left-3 text-black"></i>
@@ -22,7 +22,7 @@ const showDropdown = ref(false);
         </div>
 
         <!-- ปุ่มกรองรายวิชา -->
-        <div class="relative h-full w-60 items-center flex text-xl font-bold">
+        <div class="relative h-full w-60 items-center flex text-1/2xl font-bold">
           <button @click="showDropdown = !showDropdown"
             class="btn btn-sm bg-white rounded-xl px-4 flex items-center gap-12 h-1/2 w-full">
             กรองรายวิชา
@@ -46,10 +46,10 @@ const showDropdown = ref(false);
       <div class="flex items-center gap-3 h-full w-1/7">
         <div class="relative flex items-center h-full w-full">
           <i class="left-3 pi pi-prime text-2xl absolute " style="color:goldenrod"></i>
-          <span class="font-bold bg-white text-black rounded-2xl pl-10 w-9/10 text-xl h-1/2 flex items-center">110</span>
+          <span class="font-bold bg-white text-black rounded-2xl pl-10 w-9/10 text-1/2xl h-1/2 flex items-center">110</span>
         </div>
 
-        <router-link to="/login" class="h-full flex items-center text-xl font-bold">
+        <router-link to="/login" class="h-full flex items-center text-1/2xl font-bold">
           <button
             class="relative btn btn-outline btn-error rounded-2xl bg-white  text-black w-full h-1/2 font-bold pl-5 pr-5 text-[12px]">
             Logout

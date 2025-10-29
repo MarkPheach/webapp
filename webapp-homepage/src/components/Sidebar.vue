@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import ProfileCard from '../InfoCard/ProfileCard.vue'
+import Shop from './Shop.vue' 
 
 const menuItems = [
   { icon: 'mdi-text-box', text: 'User:.....', route: '/' },
@@ -15,9 +16,9 @@ const menuItems = [
 </script>
 
 <template>
-  <div class="flex relative w-1/6 bg-red-100">
+  <div class="flex relative w-1/7 bg-white-100">
     <!-- Sidebar -->
-    <aside class="w-1/5 bg-red-100 text-gray-800 min-h-screen shadow-xl fixed bottom-0 left-0 overflow-y-auto">
+    <aside class="w-1/7 bg-white-100 text-gray-800 min-h-screen shadow-xl fixed bottom-0 left-0 overflow-y-auto">
       <div class="flex flex-col h-full">
         <!-- Menu Items -->
         <div class="flex-1 py-6">
