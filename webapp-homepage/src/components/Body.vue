@@ -77,15 +77,15 @@ const postStore = usePostStore()
       v-if="showBeforePost"
       class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
     >
-      <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full p-8 relative">
+      <div class="bg-white rounded-2xl shadow-xl w-2xl h-1/2 p-8 relative">
         <!-- ปุ่มปิด modal -->
         <button
-          class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl"
+          class="absolute top-5 right-6 "
           @click="showBeforePost = false"
           aria-label="ปิด"
           type="button"
         >
-          &times;
+          <h1 class="text-gray-400 font-bold hover:text-gray-600 text-2xl">X</h1>
         </button>
         <BeforePost @close="showBeforePost = false" />
       </div>
