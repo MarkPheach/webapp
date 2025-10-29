@@ -8,7 +8,6 @@ import Sidebar from '../components/Sidebar.vue';
 <template>
   <div>
     <Header />
-    <Shop />
     <Body />
     <Sidebar />
   </div>

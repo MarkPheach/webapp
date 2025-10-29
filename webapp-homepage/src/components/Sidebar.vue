@@ -10,7 +10,7 @@ const menuItems = [
   { text: 'Course:CP.CY', route: '/' },
   { divider: true },
   { icon: 'mdi-briefcase', text: 'Inventory', route: '/inventory' },
-  { icon: 'mdi-store', text: 'Shop', route: '/shop' },
+  { icon: 'mdi-store', text: 'Shop'},
   { icon: 'mdi-book-open-variant', text: 'รายวิชาที่ลงเรียน', route: '/courses' }
 ]
 </script>
@@ -31,9 +31,9 @@ const menuItems = [
               <router-link
                 v-else
                 :to="item.route"
-                class="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+                class="group flex items-center px-6 py-3 text-gray-700 hover:bg-gray-300 hover:text-gray-900 transition-colors duration-200"
               >
-                <v-icon class="mr-4">{{ item.icon }}</v-icon>
+                <v-icon class="mr-4 text-gray-500 group-hover:text-gray-900">{{ item.icon }}</v-icon>
                 <span class="text-sm font-medium">{{ item.text }}</span>
               </router-link>
             </div>

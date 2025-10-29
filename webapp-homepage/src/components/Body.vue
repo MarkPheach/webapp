@@ -59,10 +59,21 @@ const postStore = usePostStore()
       </div>
     </div>
 
-    <!-- Modal: BeforePost -->
-    <div v-if="showBeforePost" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <!-- Modal -->
+    <div
+      v-if="showBeforePost"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+    >
       <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full p-8 relative">
-        <button class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl" @click="showBeforePost = false">&times;</button>
+        <!-- ปุ่มปิด modal -->
+        <button
+          class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl"
+          @click="showBeforePost = false"
+          aria-label="ปิด"
+          type="button"
+        >
+          &times;
+        </button>
         <BeforePost @close="showBeforePost = false" />
       </div>
     </div>
