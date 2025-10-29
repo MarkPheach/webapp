@@ -13,9 +13,7 @@ const postStore = usePostStore()
 <template>
   <div class="min-h-screen bg-gray-100 flex overflow-y-auto">
     <!-- Sidebar -->
-    <div class="w-64 bg-white shadow-2xl">
-      <Sidebar />
-    </div>
+    <Sidebar />
     <!-- Main Content -->
     <div class="bg-sky-200 flex-1 flex justify-center items-start pt-12 relative">
       <div class="mb-15 bg-white w-full max-w-5xl p-8 rounded-2xl shadow-2xl min-h-[800px]">
