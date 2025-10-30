@@ -3,10 +3,9 @@ import { RouterView, RouterLink } from 'vue-router';
 </script>
 
 <template>
-  <div class="bg-blue-500">
+  <div>
     <RouterView/>
-      <RouterLink to="/login">
+      <RouterLink to="/">
     </RouterLink>
-
   </div>
 </template>

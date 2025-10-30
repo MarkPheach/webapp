@@ -1,14 +1,15 @@
 <script setup>
-import Header from '../components/Header.vue'
-import Body from '../components/Body.vue';
-import Sidebar from '../components/Sidebar.vue';
+import navbar from '../components/navbar.vue';
+import asideNav from '../components/asideNav.vue';
+import mainSection from '../components/mainSection.vue';
 
 </script>
 
 <template>
   <div>
-    <Header />
-    <Body />
-    <Sidebar />
+    <navbar/>
+    <asideNav/>
+    <mainSection/>
+    <div class="max-w-screen bg-black min-h-10vh">.</div>
   </div>
 </template>

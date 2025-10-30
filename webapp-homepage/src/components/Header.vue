@@ -6,19 +6,17 @@ const showDropdown = ref(false);
 
 <template>
   <div>
-    <div class="h-1/10 w-full bg-sky-300 flex items-center">...</div>
-    <header class="flex items-center justify-between bg-sky-500 text-white fixed top-0 left-0 w-full z-50 px-4 h-1/10">
+    <header class="flex items-center justify-between bg-sky-500 text-white sticky top-0 left-0 w-full z-50 px-4 h-1/10">
 
       <!-- โลโก้ -->
       <img src="../assets/CU_DEPT_LOGO.png" alt="Logo" class="8/10 w-auto mr-3 rounded-2xl" />
 
       <!-- กลุ่มค้นหา + กรองรายวิชา -->
-      <div class="flex items-center gap-3 h-full w-1/2 text-1/2xl font-bold">
+      <div class="flex items-center h-full w-1/2 text-1/2 font-bold">
         <!-- ค้นหา -->
-        <div class="relative flex items-center ml-15 w-1/2 h-full">
-          <i class="pi pi-search absolute left-3 text-black"></i>
+        <div class="flex items-center ml-15 w-1/2 h-full">
           <input type="text" placeholder="ค้นหารายวิชา"
-            class="w-9/10 h-1/2 input input-bordered rounded-xl bg-white pl-10 pr-3 text-black placeholder-gray-400" />
+            class="w-9/10 input input-bordered rounded-xl bg-white pl-10 pr-3 text-black placeholder-gray-400" />
         </div>
 
         <!-- ปุ่มกรองรายวิชา -->
@@ -58,9 +56,5 @@ const showDropdown = ref(false);
       </div>
 
     </header>
-
-    <main class="pt-15 px-4">
-      <!-- เนื้อหา -->
-    </main>
   </div>
 </template>

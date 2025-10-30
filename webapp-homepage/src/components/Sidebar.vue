@@ -16,9 +16,7 @@ const menuItems = [
 </script>
 
 <template>
-  <div class="flex relative w-1/7 bg-white-100">
-    <!-- Sidebar -->
-    <aside class="w-1/7 bg-white-100 text-gray-800 min-h-screen shadow-xl fixed bottom-0 left-0 overflow-y-auto">
+    <aside class="w-1/7 bg-white-100 text-gray-800 min-h-screen shadow-xl fixed top-1/10 left-0 overflow-y-auto z-49">
       <div class="flex flex-col h-full">
         <!-- Menu Items -->
         <div class="flex-1 py-6">
@@ -41,7 +39,6 @@ const menuItems = [
         </div>
       </div>
     </aside>
-  </div>
 </template>
 
 <style scoped>

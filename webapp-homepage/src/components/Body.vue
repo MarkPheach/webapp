@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue'
-import Sidebar from '../components/Sidebar.vue'
 import BeforePost from './BeforePost.vue'
 import Shop from './Shop.vue'
 import Basket from './Basket.vue'   // <-- import ใหม่ (หลังจากเปลี่ยนชื่อไฟล์)
@@ -14,7 +13,6 @@ const postStore = usePostStore()
 
 <template>
   <div class="min-h-screen bg-gray-100 flex overflow-y-auto">
-    <Sidebar />
     <!-- Main Content -->
     <div class="bg-sky-200 flex-1 flex justify-center items-start pt-12 relative">
       <div class="mb-15 bg-white w-full max-w-5xl p-8 rounded-2xl shadow-2xl min-h-[800px]">
