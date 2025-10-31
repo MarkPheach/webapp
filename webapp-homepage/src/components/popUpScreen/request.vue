@@ -39,11 +39,11 @@ function acceptShow() {
 
                 <button @click="acceptShow"
                     class="px-4 py-2 text-sm font-medium bg-green-500 rounded-lg hover:bg-green-600 transition duration-150 shadow-md">
-                    อณุมัติการโพสต์
+                    อนุมัติการโพสต์
                 </button>
                 <button
                     class="px-4 py-2 text-sm font-medium bg-red-500 rounded-lg hover:bg-red-600 transition duration-150 shadow-md">
-                    ไม่อณุมัติการโพสต์
+                    ไม่อนุมัติการโพสต์
                 </button>
             </div>
 

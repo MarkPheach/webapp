@@ -1,9 +1,91 @@
 <script setup>
+import { ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { usePost } from '../../stores/post';
+
+const { posts } = storeToRefs(usePost());
+
+const isReview = ref(false);
+const isComment = ref(false);
+
+function reviewShow() {
+    isReview.value = !isReview.value
+}
+function commentShow() {
+    isComment.value = !isComment.value
+}
 </script>
 
 <template>
-    <div
-        class="min-h-150 min-w-150 bg-sky-100 rounded-2xl shadow-2xl flex justify-center items-center fixed left-125 top-25">
-        <h1>This is post</h1>
+    <div>
+        <!-- popUp สำหรับ comment -->
+        <div v-if="isReview"
+            class="min-h-100 min-w-100 bg-sky-100 rounded-2xl shadow-2xl flex flex-col justify-center items-center fixed left-125 top-25 z-50">
+            <h1>ให้กี่ดาว?</h1>
+            <button @click="reviewShow"
+                class="px-4 py-2 text-sm font-medium bg-green-500 rounded-lg hover:bg-green-600 transition duration-150 shadow-md">
+                1
+            </button>
+            <button @click="reviewShow"
+                class="px-4 py-2 text-sm font-medium bg-green-500 rounded-lg hover:bg-green-600 transition duration-150 shadow-md">
+                2
+            </button>
+            <button @click="reviewShow"
+                class="px-4 py-2 text-sm font-medium bg-green-500 rounded-lg hover:bg-green-600 transition duration-150 shadow-md">
+                3
+            </button>
+            <button @click="reviewShow"
+                class="px-4 py-2 text-sm font-medium bg-green-500 rounded-lg hover:bg-green-600 transition duration-150 shadow-md">
+                4
+            </button>
+            <button @click="reviewShow"
+                class="px-4 py-2 text-sm font-medium bg-green-500 rounded-lg hover:bg-green-600 transition duration-150 shadow-md">
+                5
+            </button>
+            <button @click="reviewShow"
+                class="px-4 py-2 text-sm font-medium bg-green-500 rounded-lg hover:bg-green-600 transition duration-150 shadow-md">
+                ยกเลิก
+            </button>
+        </div>
+        <!-- popUp สำหรับแสดงความคิดเห็น -->
+        <div v-if="isComment"
+            class="min-h-100 min-w-100 bg-sky-100 rounded-2xl shadow-2xl flex flex-col justify-center items-center fixed left-125 top-25 z-50">
+            <h1>จะเม้นไร?</h1>
+            <div class="flex h-full w-4/5 items-center justify-center">
+                <input type="text" placeholder="  Comment here." class="h-1/2 w-full item-center bg-white rounded-lg">
+            </div>
+            <button @click="commentShow"
+                class="px-4 py-2 text-sm font-medium bg-green-500 rounded-lg hover:bg-green-600 transition duration-150 shadow-md">
+                ยืนยัน
+            </button>
+            <button @click="commentShow"
+                class="px-4 py-2 text-sm font-medium bg-green-500 rounded-lg hover:bg-green-600 transition duration-150 shadow-md">
+                ยกเลิก
+            </button>
+        </div>
+        <div
+            class="min-h-150 min-w-150 bg-sky-100 rounded-2xl shadow-2xl flex flex-col items-center fixed left-125 top-25">
+
+            <!-- วนลูปในตัวแปร 'posts' -->
+            <div v-for="post in posts" :key="post.id" class="w-9/10 my-4 p-3 bg-white rounded-lg shadow-md">
+                <h2 class="text-xl font-bold text-sky-700">รีวิว : {{ post.review }} หัวข้อ : {{ post.title }}</h2>
+                <p class="text-sm mt-1">{{ post.detail }}</p>
+                <p class="text-sm mt-1">{{ post.comment.join(' | ') }}</p>
+
+                <button @click="reviewShow"
+                    class="px-4 py-2 text-sm font-medium bg-green-500 rounded-lg hover:bg-green-600 transition duration-150 shadow-md">
+                    ให้คะแนน
+                </button>
+                <button @click="commentShow"
+                    class="px-4 py-2 text-sm font-medium bg-red-500 rounded-lg hover:bg-red-600 transition duration-150 shadow-md">
+                    ตอบคำถาม
+                </button>
+            </div>
+
+            <!-- ตรวจสอบความยาวของ 'posts' -->
+            <div v-if="posts.length === 0">
+                <p>ไม่มีรายการโพสในขณะนี้</p>
+            </div>
+        </div>
     </div>
 </template>
