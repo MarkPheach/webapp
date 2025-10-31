@@ -1,7 +1,8 @@
 <script setup>
 import navbar from '../components/navbar.vue';
 import asideNav from '../components/asideNav.vue';
-import mainSection from '../components/mainSection.vue';
+import Course from '../components/course.vue';
+
 
 </script>
 
@@ -9,6 +10,6 @@ import mainSection from '../components/mainSection.vue';
   <div>
     <navbar/>
     <asideNav/>
-    <mainSection/>
+    <Course/>
   </div>
 </template>
