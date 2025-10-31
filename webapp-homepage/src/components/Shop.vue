@@ -1,114 +1,56 @@
+<script>
+import { ref } from 'vue';
+</script>
+
 <template>
-  <div class="min-h-screen p-6 bg-sky-200">
-    <div class="max-w-6xl mx-auto">
-      <!-- Header -->
-      <div class="flex items-center gap-4 mb-6">
-        <h1 class="text-3xl font-extrabold px-6 py-2 bg-sky-100 text-sky-800 rounded-full shadow">ร้านค้า</h1>
+  <div class=" bg-sky-300 h-full w-full">
+    <div class="absolute bg-blue-400 left-70 top-32 rounded-3xl w-48 h-12 text-4xl flex items-center justify-center">
+      ร้านค้า </div>
 
-        <!-- Tabs / categories -->
-        <div class="flex gap-3 flex-wrap">
-          <button class="flex items-center gap-2 px-4 py-2 bg-sky-100 text-sky-800 rounded-lg shadow">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14" /></svg>
-            กรอบโปรไฟล์
-          </button>
-          <button class="flex items-center gap-2 px-4 py-2 bg-sky-100 text-sky-800 rounded-lg shadow">
-            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16"/></svg>
-            ธีมเว็บไซต์
-          </button>
-          <button class="flex items-center gap-2 px-4 py-2 bg-sky-100 text-sky-800 rounded-lg shadow">
-            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3" stroke-width="2"/></svg>
-            อื่น ๆ
-          </button>
-        </div>
-      </div>
+    <!-- Profile -->
+    <button
+      class="absolute left-70 top-51 bg-white rounded-full w-44 h-12 flex items-center justify-center gap-2 border-2 border-gray-300 shadow"
+      aria-label="กรอบโปรไฟล์">
+      <!-- inline user icon -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24"
+        aria-hidden="true">
+        <path
+          d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h2c0-2.761 2.239-5 5-5s5 2.239 5 5h2c0-3.866-3.134-7-7-7z" />
+      </svg>
+      <span class="text-xl">กรอบโปรไฟล์</span>
+    </button>
 
-      <!-- Card container -->
-      <div class="bg-sky-100 p-6 rounded-2xl shadow-inner border-4 border-sky-200">
-        <!-- Products grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <div
-            v-for="product in products"
-            :key="product.id"
-            class="bg-white rounded-xl p-4 shadow hover:shadow-lg transition flex flex-col items-start"
-          >
-            <div class="w-full flex justify-center mb-3">
-              <img :src="product.image" :alt="product.name" class="w-28 h-28 object-cover rounded-lg bg-gray-50"/>
-            </div>
+    <!-- Theme website -->
+    <button
+      class="absolute left-120 top-51 bg-white rounded-full w-44 h-12 flex items-center justify-center gap-2 border-2 border-gray-300 shadow"
+      aria-label="ธีมเว็บไซต์">
+      <!-- inline color palette icon -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24"
+        aria-hidden="true">
+        <path
+          d="M12 2c5.522 0 10 4.478 10 10s-4.478 10-10 10c-1.892 0-3.638-.614-5.051-1.649a.999.999 0 0 1-.325-1.324l1.961-3.922a1 1 0 0 1 .875-.553h.001c1.199.001 2.279-.891 2.279-2.09 0-1.199-.98-2.463-2.179-2.463h-4.3a1 1 0 0 1-.97-1.255C5.712 3.988 8.632 2 12 2zm-8 9c.69 0 1.25-.56 1.25-1.25S4.69 8.5 4 8.5s-1.25.56-1.25 1.25S3.31 11 4 11zm3-4c.69 0 1.25-.56 1.25-1.25S7.69 4.5 7 4.5S5.75 5.06 5.75 5.75 6.31 7 7 7zm7-1c.69 0 1.25-.56 1.25-1.25S14.69 3.5 14 3.5s-1.25.56-1.25 1.25S13.31 6 14 6zm4 3c.69 0 1.25-.56 1.25-1.25S18.69 6.5 18 6.5s-1.25.56-1.25 1.25S17.31 9 18 9z" />
+      </svg>
+      <span class="text-xl">ธีมเว็บไซต์</span>
+    </button>
 
-            <h3 class="text-sm font-semibold text-sky-900 mb-2">{{ product.name }}</h3>
-            <p class="text-xs text-gray-500 mb-4">{{ product.description }}</p>
+    <!-- Chibli -->
+    <button
+      class="absolute left-170 top-51 bg-white rounded-full w-44 h-12 flex items-center justify-center gap-2 border-2 border-gray-300 shadow"
+      aria-label="จิบิ">
+      <!-- uwu emoticon image -->
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Stylized_uwu_emoticon.svg" alt="uwu emoticon"
+        class="absolute left-10 w-5 h-5 object-contain" />
+      <span class="text-xl">จิบิ</span>
+    </button>
 
-            <div class="mt-auto w-full flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <span class="inline-flex items-center justify-center w-8 h-8 bg-yellow-200 text-yellow-700 rounded-full shadow-sm">
-                  <!-- เหรียญ icon -->
-                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9" stroke-width="1.5"/><path d="M12 8v4l2 2" stroke-width="1.5"/></svg>
-                </span>
-                <span class="text-lg font-bold text-sky-900">{{ product.price }}</span>
-                <span class="text-sm text-gray-500">บาท</span>
-              </div>
+    <div class="bg-sky-200 absolute left-70 top-70 rounded-3xl w-5/6 h-3/4">
+      <div class="absolute left-10 top-10 text-2xl"></div>
+      <div class="static flex space-x-4">
 
-              <button
-                @click="addToCart(product)"
-                class="px-3 py-1 bg-sky-500 text-white rounded-md text-sm hover:bg-sky-600"
-              >
-                เพิ่มลงตะกร้า
-              </button>
-            </div>
-          </div>
-        </div>
 
-        <!-- Pagination dots (visual) -->
-        <div class="flex justify-center mt-6 gap-3">
-          <span class="w-3 h-3 bg-white opacity-50 rounded-full"></span>
-          <span class="w-3 h-3 bg-white opacity-50 rounded-full"></span>
-          <span class="w-3 h-3 bg-white opacity-50 rounded-full"></span>
-        </div>
-      </div>
-
-      <!-- (Optional) cart summary -->
-      <div class="mt-6 bg-white p-4 rounded-lg shadow">
-        <h2 class="font-semibold mb-2">ตะกร้าสินค้า</h2>
-        <ul class="text-sm text-gray-700">
-          <li v-for="item in cart" :key="item.id" class="flex justify-between py-1">
-            <span>{{ item.name }} x {{ item.quantity }}</span>
-            <span class="font-medium">{{ item.quantity * item.price }} ฿</span>
-          </li>
-          <li v-if="cart.length===0" class="text-gray-400">ยังไม่มีสินค้า</li>
-        </ul>
       </div>
     </div>
   </div>
+
+
 </template>
-
-<script>
-export default {
-  name: "Shop",
-  data() {
-    return {
-      products: [
-        { id: 1, name: "กรอบโปรไฟล์ : Stacked Black", description: "กรอบเรียบเท่ สีดำ", price: 30, image: "https://picsum.photos/seed/p1/200" },
-        { id: 2, name: "กรอบโปรไฟล์ : Golden Week", description: "วงแหวนทองหรู", price: 125, image: "https://picsum.photos/seed/p2/200" },
-        { id: 3, name: "กรอบโปรไฟล์ : Cyber Tech", description: "ดีไซน์ไซเบอร์", price: 120, image: "https://picsum.photos/seed/p3/200" },
-        { id: 4, name: "กรอบโปรไฟล์ : Rainbow splash", description: "สีสันสดใส", price: 80, image: "https://picsum.photos/seed/p4/200" },
-        { id: 5, name: "กรอบโปรไฟล์ : Sun bubles", description: "โทนส้มสดใส", price: 40, image: "https://picsum.photos/seed/p5/200" },
-        { id: 6, name: "กรอบโปรไฟล์ : Calm Wind", description: "โทนเย็นสบาย", price: 70, image: "https://picsum.photos/seed/p6/200" },
-        { id: 7, name: "กรอบโปรไฟล์ : Goal of all life", description: "คลาสสิคลายพิเศษ", price: 300, image: "https://picsum.photos/seed/p7/200" },
-        { id: 8, name: "กรอบโปรไฟล์ : Link Start", description: "ลายดิจิทัล", price: 350, image: "https://picsum.photos/seed/p8/200" }
-      ],
-      cart: []
-    };
-  },
-  methods: {
-    addToCart(product) {
-      const found = this.cart.find(i => i.id === product.id);
-      if (found) found.quantity++;
-      else this.cart.push({ ...product, quantity: 1 });
-    }
-  }
-};
-</script>
-
-<style scoped>
-/* เพิ่มจูนเล็กน้อยให้มุมและเงาใกล้เคียงภาพตัวอย่าง */
-</style>

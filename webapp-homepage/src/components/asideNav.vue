@@ -12,11 +12,18 @@
         </div>
         <!-- page -->
          <div class="h-55 w-19/20 flex flex-col my-5 px-2">
-            <h1 class="my-4 font-bold text-3xl">Go to > </h1>
+            <h1 class="my-4 font-bold text-3xl"></h1>
             <ul>
-                <li class="text-white text-3xl hover:text-5xl  transition duration-300"><button>Inventory</button></li>
-                <li class="text-white text-3xl hover:text-5xl  transition duration-300"><button>Shop</button></li>
+                <router-link to="/HomeInventory">
+                                     <li class="text-white text-3xl hover:text-5xl  transition duration-300"><button>Inventory</button></li>
+                </router-link>
+                <router-link to="/HomeShop">
+                    <li class="text-white text-3xl hover:text-5xl  transition duration-300"><button>Shop</button></li>
+                </router-link>
                 <li class="text-white text-3xl hover:text-5xl  transition duration-300"><button>Course</button></li>
+                <router-link to="/HomePage">
+                                     <li class="text-white text-3xl hover:text-5xl  transition duration-300"><button>Home</button></li>
+                </router-link>
             </ul>
          </div>
     </aside>
