@@ -18,9 +18,11 @@ const isComment = ref(false);
 
 function reviewShow() {
     isReview.value = !isReview.value
+    isComment.value = false
 }
 function commentShow() {
     isComment.value = !isComment.value
+    isReview.value = false
 }
 
 function cartShow() {
