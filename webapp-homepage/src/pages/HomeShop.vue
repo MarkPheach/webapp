@@ -10,6 +10,5 @@ import Shop from '../components/Shop.vue';
     <navbar/>
     <asideNav/>
     <Shop/>
-    <div class="bg-black w-full h-[20vh]">.</div>
   </div>
 </template>
