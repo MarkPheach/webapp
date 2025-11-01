@@ -26,5 +26,29 @@ export const usePost = defineStore('post', () => {
     },
   ])
 
-  return { posts };
+  // หา ID ถัดไปเพื่อรอรับค่า insert
+  const getNextId = () => {
+    if (posts.value.length === 0) return 1;
+    const maxId = Math.max(...posts.value.map(p => p.id));
+    return maxId + 1;
+  };
+
+  const insertPost = (newPostData) => {
+    // กำหนด ID ใหม่ให้กับข้อมูลที่จะเพิ่ม
+    const newId = getNextId();
+
+    const newPost = {
+        id: newId,
+        title: newPostData.title,
+        review: '0',
+        detail: newPostData.detail,
+        comment: [] 
+    };
+
+    posts.value.push(newPost);
+    
+    console.log(`Post ID: ${newId} ถูกเพิ่มแล้ว`);
+  };
+
+  return { posts , insertPost };
 })
