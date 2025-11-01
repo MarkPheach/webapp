@@ -1,8 +1,8 @@
 // src/firebase.js
 import { initializeApp } from "firebase/app";
-import { getAuth, connectAuthEmulator } from "firebase/auth";
-import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
-import { getDatabase, connectDatabaseEmulator } from "firebase/database";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getDatabase } from "firebase/database";
 
 // 🔥 config ของโปรเจกต์คุณ (เอามาจาก Firebase console)
 const firebaseConfig = {
@@ -25,8 +25,8 @@ export const db = getFirestore(app);
 export const database = getDatabase(app);
 
 // ใช้งาน Emulator เมื่อรันบน localhost
-if (window.location.hostname === "localhost") {
+/*if (window.location.hostname === "localhost") {
   connectAuthEmulator(auth, "http://127.0.0.1:9099");
   connectFirestoreEmulator(db, "127.0.0.1", 8080);
   connectDatabaseEmulator(database, "127.0.0.1", 9000);
-}
+}*/

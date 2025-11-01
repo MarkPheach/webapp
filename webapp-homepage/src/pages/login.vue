@@ -30,7 +30,7 @@ const login = async () => {
       password.value
     )
     console.log("✅ Logged in:", userCredential.user)
-    router.push("/home") // เปลี่ยนหน้าเมื่อเข้าสู่ระบบสำเร็จ
+    router.push("/HomePage") // เปลี่ยนหน้าเมื่อเข้าสู่ระบบสำเร็จ
   } catch (error) {
     console.error("❌ Login failed:", error.message)
     errorMsg.value = "เข้าสู่ระบบไม่สำเร็จ: " + error.message
