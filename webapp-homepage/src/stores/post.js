@@ -5,22 +5,25 @@ export const usePost = defineStore('post', () => {
   const posts = ref([
     {
         id: 1,
+        name: 'annonymous',
         title: 'คณิตศาสตร์',
-        review: '4.5',
+        review: 4.5,
         detail: 'ต้องการติวคณิตศาสตร์ ม.ปลาย',
         comment: ['อย่าติวเลย สอบไม่ผ่านอยู่แล้ว','พี่รับครับ คืนละ 1500']
     },
     {
         id: 2,
+        name: 'annonymous',
         title: 'Web Development',
-        review: '2',
+        review: 2,
         detail: 'ไม่ต้องการติด F',
         comment: ['ผมเป็นเก']
     },
     {
         id: 3,
+        name: 'annonymous',
         title: 'คณิตศาสตร์',
-        review: '6',
+        review: 5,
         detail: 'หาหนังสือติวคณิตสอบเข้า ม.4',
         comment: ['มาติวกับพี่ดีกว่าน้อง','wartunder มั้ยเพื่อน']
     },
@@ -50,5 +53,13 @@ export const usePost = defineStore('post', () => {
     console.log(`Post ID: ${newId} ถูกเพิ่มแล้ว`);
   };
 
-  return { posts , insertPost };
+  // addComment
+  const addComment = (postId, comment) => {
+    const post = posts.value.find(p => p.id === postId);
+    if (post) {
+      post.comment.push(comment);
+    }
+  };
+
+  return { posts , insertPost , addComment };
 })

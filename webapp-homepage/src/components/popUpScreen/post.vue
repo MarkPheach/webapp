@@ -2,22 +2,22 @@
 import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useUserDummy } from '../../stores/userDummy';
-import { usePost } from '../../stores/post';
+import { useRequest } from '../../stores/request';
 
 const { userDummys } = storeToRefs(useUserDummy());
-const { posts } = storeToRefs(usePost());
+const { requests } = storeToRefs(useRequest());
 const isConfirm = ref(false);
 const inputTitle = ref('');
 const inputDetail = ref('');
 
 //การโพส
 const handleAddPost = () => {
-    const newPost = {
+    const newRequest = {
         title: inputTitle.value,
         detail: inputDetail.value,
     };
 
-    usePost().insertPost(newPost);
+    useRequest().addRequest(newRequest);
 
     //   ล้างฟอร์มหลังโพส
     inputTitle.value = '';

@@ -7,21 +7,42 @@ export const useRequest = defineStore('request', () => {
         id: 1,
         name: 'Kanathat',
         title: 'คณิตศาสตร์',
-        detail: 'ต้องการติวคณิตศาสตร์ ม.ปลาย'
+        review: 0,
+        detail: 'ต้องการติวคณิตศาสตร์ ม.ปลาย',
+        comment: []
     },
     {
         id: 2,
         name: 'Jakree',
         title: 'Web Development',
-        detail: 'ไม่ต้องการติด F'
+        review: 0,
+        detail: 'ไม่ต้องการติด F',
+        comment: []
     },
     {
         id: 3,
         name: 'Hacker',
         title: 'คณิตศาสตร์',
-        detail: 'หาหนังสือติวคณิตสอบเข้า ม.4'
+        review: 0,
+        detail: 'หาหนังสือติวคณิตสอบเข้า ม.4',
+        comment: []
     },
   ])
 
-  return { requests};
+  //addRequest
+  const addRequest = (newRequest) => {
+    requests.value.push(newRequest);
+    console.log('เพิ่มคำขอใหม่:', newRequest);
+  };
+
+  // removeRequest
+  const removeRequest = (requestId) => {
+    const index = requests.value.findIndex(r => r.id === requestId);
+    if (index !== -1) {
+      requests.value.splice(index, 1);
+      console.log(`Request ID: ${requestId} ถูกลบแล้ว`);
+    }
+  };
+
+  return { requests , removeRequest , addRequest };
 })
