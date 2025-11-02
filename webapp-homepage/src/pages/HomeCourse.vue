@@ -10,6 +10,6 @@ import Course from '../components/course.vue';
   <div>
     <navbar/>
     <asideNav/>
-    <Course/>
+    <Course/> 
   </div>
 </template>
