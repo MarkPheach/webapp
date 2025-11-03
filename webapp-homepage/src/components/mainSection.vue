@@ -5,6 +5,7 @@ import post from './popUpScreen/post.vue';
 import request from './popUpScreen/request.vue';
 import { storeToRefs } from 'pinia';
 import { usePost } from '../stores/post';
+const postStore = usePost();
 
 const isCart = ref(false);
 const isPost = ref(false);
@@ -252,7 +253,7 @@ function sendSeniorAnswer(postId) {
     <main class="flex justify-around min-h-[calc(100vh_-_10vh)] min-w-screen">
       <div class="flex flex-col float-right h-170 w-300 rounded-2xl mr-12 mt-3">
 
-        <div v-for="post in posts" :key="post.id"
+        <div v-for="post in postStore.filteredPosts" :key="post.id"
           class="w-9/10 my-4 p-4 bg-white rounded-xl shadow-lg border border-gray-100">
           <h2 class="text-lg font-bold text-sky-800 mb-1">
             Rating: {{ post.review }}⭐ | {{ post.name }} โพสในหัวข้อ: {{ post.title }}
