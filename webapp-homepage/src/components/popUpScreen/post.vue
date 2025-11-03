@@ -2,9 +2,27 @@
 import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useUserDummy } from '../../stores/userDummy';
+import { useRequest } from '../../stores/request';
 
 const { userDummys } = storeToRefs(useUserDummy());
+const { requests } = storeToRefs(useRequest());
 const isConfirm = ref(false);
+const inputTitle = ref('');
+const inputDetail = ref('');
+
+//การโพส
+const handleAddPost = () => {
+    const newRequest = {
+        title: inputTitle.value,
+        detail: inputDetail.value,
+    };
+
+    useRequest().addRequest(newRequest);
+
+    //   ล้างฟอร์มหลังโพส
+    inputTitle.value = '';
+    inputDetail.value = '';
+}
 
 function confirmShow() {
     isConfirm.value = !isConfirm.value
@@ -16,11 +34,11 @@ function confirmShow() {
     <div v-if="isConfirm"
         class="min-h-100 min-w-100 bg-sky-100 rounded-2xl shadow-2xl flex flex-col justify-center items-center fixed left-125 top-25 z-50">
         <h1>แน่ใจ๊?</h1>
-        <button @click="confirmShow"
+        <button @click="confirmShow(); handleAddPost();"
             class="px-4 py-2 text-sm font-medium bg-green-500 rounded-lg hover:bg-green-600 transition duration-150 shadow-md">
             ยืนยันการโพสต์
         </button>
-        <button @click="confirmShow"
+        <button @click="confirmShow();"
             class="px-4 py-2 text-sm font-medium bg-green-500 rounded-lg hover:bg-green-600 transition duration-150 shadow-md">
             ยกเลิก
         </button>
@@ -32,7 +50,10 @@ function confirmShow() {
             <p class="text-sm mt-1">{{ userDummy.StdID }}</p>
             <h1>จะโพสไร?</h1>
             <div class="flex h-full w-4/5 items-center justify-center">
-                <input type="text" placeholder="  Comment here." class="h-1/2 w-full item-center bg-white rounded-lg">
+                <input type="text" v-model="inputTitle" placeholder=" ชื่อหัวข้อ (Title)"
+                    class="h-1/2 w-full item-center bg-white rounded-lg">
+                <textarea v-model="inputDetail" placeholder=" รายละเอียด (Detail)" rows="3"
+                    class="w-full item-center p-2 bg-gray-100 rounded-lg border-2 border-gray-300 resize-none"></textarea>
             </div>
 
             <button @click="confirmShow"
