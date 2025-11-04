@@ -126,13 +126,17 @@ function sendSeniorAnswer(postId) {
 
   answerInput.value = '';
 }
+const bgColor = ref('bg-sky-100') // สีเริ่มต้น
+function changeColor(color) {
+  bgColor.value = color
+}
 </script>
 
 <template>
   <div>
     <cart v-if="isCart" />
     <post v-if="isPost" />
-    <request v-if="isRequest" />
+    <request v-if="isRequest" /> 
 
     <!-- ✅ POPUP คำตอบรุ่นพี่ -->
     <div v-if="activePostId !== null"
@@ -250,7 +254,7 @@ function sendSeniorAnswer(postId) {
     </div>
 
     <!-- ✅ หน้าโพสต์หลัก -->
-    <main class="flex justify-around min-h-[calc(100vh_-_10vh)] min-w-screen">
+    <main class="flex justify-around min-h-[calc(100vh_-_10vh)] h-auto pt-1 bg-sky-100">    
       <div class="flex flex-col float-right h-170 w-300 rounded-2xl mr-12 mt-3">
 
         <div v-for="post in postStore.filteredPosts" :key="post.id"
