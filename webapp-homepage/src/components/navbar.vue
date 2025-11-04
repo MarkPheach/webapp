@@ -1,24 +1,96 @@
+<script setup>
+import { ref } from 'vue';
+import 'primeicons/primeicons.css';
+const showDropdown = ref(false);
+</script>
+
 <template>
-  <nav class="bg-blue-900 sticky top-0 left-0 w-full z-50 h-[10vh] flex justify-between items-center pr-14">
-    <!-- Logo -->
-    <div class="h-8/10 w-auto bg-white rounded-4xl flex items-center px-4 ms-4">
-      <img src="../assets/CU_DEPT_LOGO.png" alt="kku logo" class="h-full w-auto ">
+  <header
+    class="flex items-center justify-between bg-gradient-to-r from-blue-900 to-sky-600 text-white sticky top-0 left-0 w-full z-50 px-6 h-[10vh] shadow-md">
+
+    <!-- โลโก้ -->
+    <div class="flex items-center gap-3">
+      <img
+        src="../assets/CU_DEPT_LOGO.png"
+        alt="Logo"
+        class="h-[60px] w-auto rounded-2xl shadow-md bg-white/10 p-1"
+      />
+      <h1 class="text-2xl font-semibold tracking-wide drop-shadow">CourseHub</h1>
     </div>
 
-    <!-- Search bar -->
-    <div class="flex h-full w-1/5 items-center justify-center">
-      <input type="text" placeholder=" search here." class="h-1/2 w-full bg-white rounded-lg ms-4 focus:outline-none px-4" />
+    <!-- กล่องค้นหา + ตัวกรอง -->
+    <div class="flex items-center gap-4 w-1/2">
+
+      <!-- ช่องค้นหา -->
+      <div class="relative w-2/3">
+        <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+        <input
+          type="text"
+          placeholder="ค้นหารายวิชา..."
+          class="w-full h-[45px] rounded-xl bg-white/90 text-black pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-sky-400 placeholder-gray-400 shadow-sm"
+        />
+      </div>
+
+      <!-- ปุ่มกรองรายวิชา -->
+      <div class="relative w-[180px]">
+        <button
+          @click="showDropdown = !showDropdown"
+          class="w-full flex justify-between items-center bg-white text-blue-900 font-semibold rounded-xl px-4 py-2 shadow-md hover:bg-sky-100 transition-all duration-200"
+        >
+          กรองรายวิชา
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 transition-transform duration-200 ease-in-out"
+            :class="showDropdown ? 'rotate-180' : 'rotate-0'"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path d="M5.5 7.5L10 12l4.5-4.5H5.5z" />
+          </svg>
+        </button>
+
+        <!-- dropdown -->
+        <ul
+          v-show="showDropdown"
+          class="absolute right-0 top-[110%] z-50 bg-white text-blue-900 font-medium shadow-xl rounded-xl overflow-hidden w-full animate-fadeIn"
+        >
+          <li class="hover:bg-sky-100 px-4 py-2 cursor-pointer">ทุกรายวิชา</li>
+          <li class="hover:bg-sky-100 px-4 py-2 cursor-pointer">รายวิชาที่เลือก</li>
+          <li class="hover:bg-sky-100 px-4 py-2 cursor-pointer">อื่นๆ</li>
+        </ul>
+      </div>
     </div>
 
-    <!-- Buttons -->
-    <div class="flex justify-between h-full w-1/4 items-center ">
-      <button class="bg-white rounded-xl w-24 h-1/2 text-indigo-900 hover:bg-gray-500">🪙 110</button>
-      <router-link to="/login" class="block">
-      <button class="bg-white rounded-2xl w-16 h-1/2 hover:text-gray-500">log out</button>
+    <!-- คะแนน + Logout -->
+    <div class="flex items-center gap-4">
+      <div class="relative flex items-center bg-white/90 rounded-xl px-4 py-1 shadow-sm text-black font-semibold">
+        <i class="pi pi-star-fill text-yellow-500 mr-2"></i>
+        <span>110</span>
+      </div>
+
+      <router-link to="/login">
+        <button
+          class="bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl px-5 py-2 shadow-md transition-all duration-200"
+        >
+          Logout
+        </button>
       </router-link>
     </div>
-  </nav>
+  </header>
 </template>
 
-<script setup>
-</script>
+<style scoped>
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out;
+}
+</style>

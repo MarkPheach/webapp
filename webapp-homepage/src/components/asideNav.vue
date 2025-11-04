@@ -1,40 +1,48 @@
 <template>
   <aside
-    class="fixed left-0 min-h-[calc(100vh-10vh)] max-w-[20vw] bg-sky-50 flex flex-col items-center">
+    class="fixed left-0 top-[10vh] h-[90vh] w-[15vw] bg-gradient-to-b from-blue-900 to-blue-700 flex flex-col items-center text-white shadow-2xl rounded-tr-2xl">
 
     <!-- user detail -->
-    <div class="h-[180px] w-[95%] rounded-xl bg-white flex flex-col justify-center my-5 px-2">
-      <h1 class="w-[90%]">Name : UserName</h1>
-      <h3 class="w-[90%]">StudentID : studentID</h3>
-      <h3 class="w-[90%]">StudentFact : studentFaculty</h3>
-      <h3 class="w-[90%]">StudentDept : studentDepartment</h3>
+    <div
+      class="w-[90%] bg-white/10 backdrop-blur-md rounded-2xl flex flex-col justify-center items-start my-5 p-3 text-xs shadow-md">
+      <h1 class="font-semibold text-base mb-1">👤 UserName</h1>
+      <p>ID: <span class="text-blue-200">studentID</span></p>
+      <p>Faculty: <span class="text-blue-200">studentFaculty</span></p>
+      <p>Department: <span class="text-blue-200">studentDepartment</span></p>
     </div>
 
-    <!-- page -->
-    <div class="flex flex-col my-5 px-2 w-[95%]"> 
-      <ul>
-        <router-link to="/HomeInventory">
-          <li class="text-indigo-900 text-3xl hover:text-4xl transition duration-300">
-            <button>Inventory</button>
-          </li>
-        </router-link>
-        <router-link to="/HomeShop">
-          <li class="text-indigo-900 text-3xl hover:text-4xl transition duration-300">
-            <button>Shop</button>
-          </li>
-        </router-link>
-        <router-link to="/HomeCourse">
-          <li class="text-indigo-900 text-3xl hover:text-4xl transition duration-300">
-            <button>Course</button>
-          </li>
-        </router-link>
+    <!-- page menu -->
+    <nav class="w-[90%] mt-3">
+      <ul class="flex flex-col gap-3">
         <router-link to="/HomePage">
-          <li class="text-indigo-900 text-3xl hover:text-4xl transition duration-300">
-            <button>Home</button>
+          <li
+            class="text-white text-lg font-medium py-2 px-3 rounded-xl bg-white/5 hover:bg-white/20 hover:scale-105 hover:shadow-md transition-all duration-300 text-center">
+            HOME
+          </li>
+        </router-link>
+
+        <router-link to="/HomeInventory">
+          <li
+            class="text-white text-lg font-medium py-2 px-3 rounded-xl bg-white/5 hover:bg-white/20 hover:scale-105 hover:shadow-md transition-all duration-300 text-center">
+            INVENTORY
+          </li>
+        </router-link>
+
+        <router-link to="/HomeShop">
+          <li
+            class="text-white text-lg font-medium py-2 px-3 rounded-xl bg-white/5 hover:bg-white/20 hover:scale-105 hover:shadow-md transition-all duration-300 text-center">
+            SHOP
+          </li>
+        </router-link>
+
+        <router-link to="/HomeCourse">
+          <li
+            class="text-white text-lg font-medium py-2 px-3 rounded-xl bg-white/5 hover:bg-white/20 hover:scale-105 hover:shadow-md transition-all duration-300 text-center">
+            COURSE
           </li>
         </router-link>
       </ul>
-    </div>
+    </nav>
   </aside>
 </template>
 
