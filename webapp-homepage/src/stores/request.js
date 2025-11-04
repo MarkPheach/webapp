@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useUserDummy } from './userDummy'
 
 export const useRequest = defineStore('request', () => {
   const requests = ref([
@@ -21,7 +22,7 @@ export const useRequest = defineStore('request', () => {
     },
     {
         id: 3,
-        name: 'Hacker',
+        name: 'นาย สมชาย ใจดี',
         title: 'คณิตศาสตร์',
         review: 0,
         detail: 'หาหนังสือติวคณิตสอบเข้า ม.4',
@@ -44,5 +45,33 @@ export const useRequest = defineStore('request', () => {
     }
   };
 
-  return { requests , removeRequest , addRequest };
+  // editRequest
+  const editRequest = (requestId, updatedData) => {
+    const request = requests.value.find(r => r.id === requestId); // เข้าถึง .value
+    
+    if (request) {
+      // ใช้ Object.assign เพื่ออัพเดต properties ใน reactive object โดยตรง
+      Object.assign(request, updatedData); 
+      console.log(`Request ID: ${requestId} ถูกแก้ไขแล้ว`, updatedData);
+    }
+  };
+
+  return { requests , removeRequest , addRequest , editRequest };
+})
+
+export const useUserRequest = defineStore('userRequest', () => {
+  const userRequests = computed(() => {
+    return useRequest().requests.filter(request => 
+      request.name === useUserDummy().userDummys[0].name
+    );
+  });
+
+  const removeUserRequest = (requestId) => {
+    useRequest().removeRequest(requestId);
+  };
+
+  const editUserRequest = (requestId, updatedData) => {
+    useRequest().editRequest(requestId, updatedData);
+  };
+  return { userRequests, removeUserRequest, editUserRequest };
 })
