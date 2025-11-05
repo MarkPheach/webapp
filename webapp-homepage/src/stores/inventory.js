@@ -1,23 +1,34 @@
+// src/stores/inventory.js
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-export const useInventory = defineStore("inventory", () => {
-  // คลังของผู้เล่น
-  const items = ref([]);
+export const useInventoryStore = defineStore("inventory", () => {
+  const profileFrames = ref([]);
+  const themes = ref([]);
+  const chibis = ref([]);
 
-  // ฟังก์ชันเพิ่มของเข้า inventory
   function addItem(item) {
-    // ป้องกันของซ้ำ
-    const exists = items.value.find((i) => i.id === item.id);
-    if (!exists) {
-      items.value.push(item);
-    }
+    const targetArray =
+      item.type === "Profileframe"
+        ? profileFrames.value
+        : item.type === "theme"
+        ? themes.value
+        : chibis.value;
+
+    const exists = targetArray.some((i) => i.id === item.id);
+    if (!exists) targetArray.push(item);
   }
 
-  // ฟังก์ชันลบของออก (ถ้าต้องการ)
-  function removeItem(id) {
-    items.value = items.value.filter((i) => i.id !== id);
+  function removeItem(type, id) {
+    const targetArray =
+      type === "Profileframe"
+        ? profileFrames.value
+        : type === "theme"
+        ? themes.value
+        : chibis.value;
+    const index = targetArray.findIndex((i) => i.id === id);
+    if (index !== -1) targetArray.splice(index, 1);
   }
 
-  return { items, addItem, removeItem };
+  return { profileFrames, themes, chibis, addItem, removeItem };
 });
