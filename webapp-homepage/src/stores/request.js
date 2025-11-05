@@ -1,44 +1,48 @@
-import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-import { useUserDummy } from './userDummy'
+import { defineStore } from "pinia";
+import { ref, computed } from "vue";
+import { useUserDummy } from "./userDummy";
 
-export const useRequest = defineStore('request', () => {
+export const useRequest = defineStore("request", () => {
   const requests = ref([
-    {
-        id: 1,
-        name: 'Kanathat',
-        title: 'คณิตศาสตร์',
-        review: 0,
-        detail: 'ต้องการติวคณิตศาสตร์ ม.ปลาย',
-        comment: []
-    },
-    {
-        id: 2,
-        name: 'Jakree',
-        title: 'Web Development',
-        review: 0,
-        detail: 'ไม่ต้องการติด F',
-        comment: []
-    },
-    {
-        id: 3,
-        name: 'นาย สมชาย ใจดี',
-        title: 'คณิตศาสตร์',
-        review: 0,
-        detail: 'หาหนังสือติวคณิตสอบเข้า ม.4',
-        comment: []
-    },
-  ])
+  {
+    id: 1,
+    name: "Kanathat",
+    title: "คณิตศาสตร์",
+    review: 0,
+    detail: "ต้องการติวคณิตศาสตร์ ม.ปลาย",
+    comment: [],
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 2,
+    name: "Jakree",
+    title: "Web Development",
+    review: 0,
+    detail: "ไม่ต้องการติด F",
+    comment: [],
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 3,
+    name: "นาย สมชาย ใจดี",
+    title: "คณิตศาสตร์",
+    review: 0,
+    detail: "หาหนังสือติวคณิตสอบเข้า ม.4",
+    comment: [],
+    createdAt: new Date().toISOString(),
+  },
+]);
 
   //addRequest
   const addRequest = (newRequest) => {
+    newRequest.createdAt = new Date().toISOString();
     requests.value.push(newRequest);
-    console.log('เพิ่มคำขอใหม่:', newRequest);
+    console.log("เพิ่มคำขอใหม่:", newRequest);
   };
 
   // removeRequest
   const removeRequest = (requestId) => {
-    const index = requests.value.findIndex(r => r.id === requestId);
+    const index = requests.value.findIndex((r) => r.id === requestId);
     if (index !== -1) {
       requests.value.splice(index, 1);
       console.log(`Request ID: ${requestId} ถูกลบแล้ว`);
@@ -47,22 +51,22 @@ export const useRequest = defineStore('request', () => {
 
   // editRequest
   const editRequest = (requestId, updatedData) => {
-    const request = requests.value.find(r => r.id === requestId); // เข้าถึง .value
-    
+    const request = requests.value.find((r) => r.id === requestId); // เข้าถึง .value
+
     if (request) {
       // ใช้ Object.assign เพื่ออัพเดต properties ใน reactive object โดยตรง
-      Object.assign(request, updatedData); 
+      Object.assign(request, updatedData);
       console.log(`Request ID: ${requestId} ถูกแก้ไขแล้ว`, updatedData);
     }
   };
 
-  return { requests , removeRequest , addRequest , editRequest };
-})
+  return { requests, removeRequest, addRequest, editRequest };
+});
 
-export const useUserRequest = defineStore('userRequest', () => {
+export const useUserRequest = defineStore("userRequest", () => {
   const userRequests = computed(() => {
-    return useRequest().requests.filter(request => 
-      request.name === useUserDummy().userDummys[0].name
+    return useRequest().requests.filter(
+      (request) => request.name === useUserDummy().userDummys[0].name
     );
   });
 
@@ -74,4 +78,4 @@ export const useUserRequest = defineStore('userRequest', () => {
     useRequest().editRequest(requestId, updatedData);
   };
   return { userRequests, removeUserRequest, editUserRequest };
-})
+});
