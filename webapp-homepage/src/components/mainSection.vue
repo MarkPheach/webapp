@@ -3,16 +3,19 @@ import { ref, computed } from 'vue';
 import cart from './popUpScreen/cart.vue';
 import post from './popUpScreen/post.vue';
 import request from './popUpScreen/request.vue';
+import userRequest from './popUpScreen/userRequest.vue';
 import { storeToRefs } from 'pinia';
 import { usePost } from '../stores/post';
-const postStore = usePost();
+import { useUserRequest } from '../stores/request';
 
 const isCart = ref(false);
 const isPost = ref(false);
 const isRequest = ref(false);
 const isAdmin = ref(true);
+const isUserRequest = ref(false);
 
 const { posts } = storeToRefs(usePost());
+const { userRequests } = storeToRefs(useUserRequest());
 
 // popup ต่าง ๆ
 const isReview = ref(false);
@@ -54,6 +57,10 @@ function closeReview() {
   isReview.value = false;
   reviewType.value = null;
   reviewTargetId.value = null;
+}
+
+function userRequestShow() {
+  isUserRequest.value = !isUserRequest.value;
 }
 
 function reviewShow(postId) {
@@ -126,17 +133,13 @@ function sendSeniorAnswer(postId) {
 
   answerInput.value = '';
 }
-const bgColor = ref('bg-sky-100') // สีเริ่มต้น
-function changeColor(color) {
-  bgColor.value = color
-}
 </script>
 
 <template>
   <div>
     <cart v-if="isCart" />
     <post v-if="isPost" />
-    <request v-if="isRequest" /> 
+    <request v-if="isRequest" />
 
     <!-- ✅ POPUP คำตอบรุ่นพี่ -->
     <div v-if="activePostId !== null"
@@ -199,8 +202,8 @@ function changeColor(color) {
               <p class="text-gray-800 text-sm whitespace-pre-wrap">{{ answer }}</p>
               <button @click="reviewCommentShow(activePostId, index)"
                 class="px-3 py-1 text-xs font-medium rounded-full transition duration-150 shadow-sm text-black" :class="ratings[`comment-${activePostId}-${index}`]
-                    ? 'bg-yellow-300 hover:bg-yellow-400'
-                    : 'bg-orange-200 hover:bg-orange-300'
+                  ? 'bg-yellow-300 hover:bg-yellow-400'
+                  : 'bg-orange-200 hover:bg-orange-300'
                   ">
                 <template v-if="ratings[`comment-${activePostId}-${index}`]">
                   คุณให้ {{ getEmoji(ratings[`comment-${activePostId}-${index}`]) }}
@@ -254,11 +257,21 @@ function changeColor(color) {
     </div>
 
     <!-- ✅ หน้าโพสต์หลัก -->
-    <main class="flex justify-around min-h-[calc(100vh_-_10vh)] h-auto pt-1 bg-sky-100">    
-      <div class="flex flex-col float-right h-170 w-300 rounded-2xl mr-12 mt-3">
+    <main class="flex justify-around min-h-[90vh] min-w-screen">
 
-        <div v-for="post in postStore.filteredPosts" :key="post.id"
-          class="w-9/10 my-4 p-4 bg-white rounded-xl shadow-lg border border-gray-100">
+      <div class="flex flex-col float-right h-170 w-300 rounded-2xl mr-12 mt-3">
+        <!-- request -->
+        <div id="request" class="bg-gray-100 rounded-2xl flex flex-col items-left justify-center w-9/10 py-5 px-6">
+          <h1>โพสที่รอดำเนินการ</h1>
+          <p class="text-gray-500">{{ useUserRequest().userRequests.length }} โพส</p>
+          <button class="px-3 py-1 bg-white rounded-full transition duration-150 shadow-sm" @click="userRequestShow">
+            <p class="text-gray-500 ">จัดการโพส</p>
+          </button>
+          <userRequest v-if="isUserRequest"/>
+        </div>
+        <!-- post -->
+        <div v-for="post in posts" :key="post.id"
+          class="w-9/10 my-4 bg-white rounded-xl shadow-lg border border-gray-100 py-4 px-6">
           <h2 class="text-lg font-bold text-sky-800 mb-1">
             Rating: {{ post.review }}⭐ | {{ post.name }} โพสในหัวข้อ: {{ post.title }}
           </h2>
@@ -281,8 +294,8 @@ function changeColor(color) {
           <div class="flex gap-2 mt-3">
             <button @click="reviewShow(post.id)"
               class="px-3 py-1 text-xs font-medium rounded-full transition duration-150 shadow-sm text-black" :class="ratings[`post-${post.id}`]
-                  ? 'bg-yellow-300 hover:bg-yellow-400'
-                  : 'bg-orange-200 hover:bg-orange-300'
+                ? 'bg-yellow-300 hover:bg-yellow-400'
+                : 'bg-orange-200 hover:bg-orange-300'
                 ">
               <template v-if="ratings[`post-${post.id}`]">
                 คุณให้ {{ getEmoji(ratings[`post-${post.id}`]) }}

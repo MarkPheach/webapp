@@ -13,6 +13,7 @@ const inputDetail = ref('');
 //การโพส
 const handleAddPost = () => {
     const newRequest = {
+        name: userDummys.value[0].name,
         title: inputTitle.value,
         detail: inputDetail.value,
     };
