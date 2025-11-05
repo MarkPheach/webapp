@@ -1,22 +1,27 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useCart } from '../../stores/cart'
+import { useChibi } from '../../stores/chibi'
+import { useThemeStore } from '../../stores/theme'
+import { useProfileFrameStore } from '../../stores/profileframe'
 
-// ดึงข้อมูลตะกร้าสินค้า
 const { carts } = storeToRefs(useCart())
 
-// props จาก parent
-const { typeOfPurchase, itemPrice } = defineProps({
+const { typeOfPurchase, itemPrice, state, image, type } = defineProps({
   typeOfPurchase: { type: String, default: 'NULLA' },
   itemPrice: { type: Number, default: 0 },
+  state: { type: String, default: 'EROR' },
+  image: { type: String, default: '' },
+  type: { type: String, default: 'EROR' },
 })
 
-// ควบคุม popup การยืนยัน
+// ✅ ประกาศ default image ที่นี่แทน
+const defaultImage = new URL('../../assets/Eror.jpg', import.meta.url).href
+
 const isAccept = ref(false)
 const emit = defineEmits(['close'])
 
-// รวมราคารวม
 function sumPrice() {
   let sum = 0
   carts.value.forEach((cart) => {
@@ -24,6 +29,7 @@ function sumPrice() {
   })
   return sum
 }
+
 const totalPrice = ref(sumPrice())
 
 function acceptShow() {
@@ -33,33 +39,55 @@ function acceptShow() {
 function closePopup() {
   emit('close')
 }
+
+// 🧩 ยืนยันการซื้อ
+function confirmPurchase() {
+  if (type === 'chibi') {
+    const store = useChibi()
+    const found = store.chibis.find((item) => item.name === typeOfPurchase)
+    if (found) found.state = 'เป็นเจ้าของ'
+  } 
+  else if (type === 'theme') {
+    const store = useThemeStore()
+    const found = store.themes.find((item) => item.name === typeOfPurchase)
+    if (found) found.state = 'เป็นเจ้าของ '
+  }
+  else if (type === 'Profileframe') {
+    const store = useProfileFrameStore()
+    const found = store.ProfileFrame.find((item) => item.name === typeOfPurchase)
+    if (found) found.state = 'เป็นเจ้าของ '
+  }
+
+  emit('close')
+}
 </script>
 
 <template>
-  <!-- ✅ ห่อทั้งหมดไว้ใน div เดียว -->
   <div>
-    <!-- หน้าต่างหลักของ Popup -->
     <div
-      class="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-lg border border-gray-200 rounded-3xl shadow-2xl w-[380px] h-[180px] flex flex-col items-center p-6 transition-all duration-300 z-40"
+      class="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-lg border border-gray-200 rounded-3xl shadow-2xl w-[380px] h-[350px] flex flex-col items-center p-6 transition-all duration-300 z-40"
     >
-      <!-- ชื่อรายการ -->
       <h2 class="text-xl font-bold text-gray-800 mb-2">🛒 รายการสั่งซื้อ</h2>
+
+      <!-- ✅ ใช้ตัวแปร defaultImage -->
+      <img
+        :src="image || defaultImage"
+        alt="Item Image"
+        class="w-20 object-cover rounded-lg mb-2"
+      />
 
       <div class="w-full border-b border-gray-300 mb-4"></div>
 
-      <!-- แสดงชื่อ item -->
       <p class="text-base text-gray-700 mb-1">
         <span class="font-semibold text-blue-700">สินค้า:</span>
         {{ typeOfPurchase }}
       </p>
 
-      <!-- แสดงราคา -->
       <p class="text-base text-gray-700 mb-4">
         <span class="font-semibold text-amber-600">ราคา:</span>
         {{ itemPrice }} coins
       </p>
 
-      <!-- ปุ่มชำระเงิน -->
       <button
         @click="acceptShow"
         class="mt-2 w-3/4 py-2 rounded-xl bg-gradient-to-r from-pink-500 to-red-500 text-white font-semibold shadow-lg hover:opacity-90 transition-all"
@@ -67,12 +95,10 @@ function closePopup() {
         ชำระเงิน
       </button>
 
-      <!-- ไม่มีสินค้า -->
       <div v-if="carts.length === 0" class="mt-4 text-gray-500 text-sm italic">
         ไม่มีรายการไอเท็มในขณะนี้
       </div>
 
-      <!-- ปุ่มปิด -->
       <button
         @click="closePopup"
         class="absolute top-2 right-3 text-gray-400 hover:text-black transition"
@@ -82,7 +108,6 @@ function closePopup() {
       </button>
     </div>
 
-    <!-- Popup ยืนยันการชำระเงิน -->
     <transition name="fade">
       <div
         v-if="isAccept"
@@ -102,11 +127,12 @@ function closePopup() {
 
           <div class="flex justify-center gap-4">
             <button
-              @click="closePopup"
+              @click="confirmPurchase"
               class="px-6 py-2 text-sm font-medium bg-green-500 text-black rounded-lg hover:bg-green-600 transition duration-150 shadow-md"
             >
               ยืนยัน
             </button>
+
             <button
               @click="acceptShow"
               class="px-6 py-2 text-sm font-medium bg-red-500 text-black rounded-lg hover:bg-red-600 transition duration-150 shadow-md"
@@ -119,31 +145,3 @@ function closePopup() {
     </transition>
   </div>
 </template>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.25s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-@keyframes scale-in {
-  from {
-    transform: scale(0.9);
-    opacity: 0;
-  }
-
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.animate-scale-in {
-  animation: scale-in 0.25s ease-out;
-}
-</style>

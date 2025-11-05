@@ -11,71 +11,78 @@ const isConfirm = ref(false);
 const inputTitle = ref('');
 const inputDetail = ref('');
 
-//การโพส
+// การโพสต์
 const handleAddPost = () => {
     const newRequest = {
         name: userDummys.value[0].name,
         title: inputTitle.value,
         detail: inputDetail.value,
+        createdAt: new Date().toISOString(), // ✅ แก้ให้ตรง
     };
 
-    useRequest().addRequest(newRequest);
 
-    //   ล้างฟอร์มหลังโพส
+    useRequest().addRequest(newRequest);
     inputTitle.value = '';
     inputDetail.value = '';
-}
+};
 
 function confirmShow() {
-    isConfirm.value = !isConfirm.value
+    isConfirm.value = !isConfirm.value;
 }
 </script>
 
 <template>
-    <!-- popUp สำหรับยืนยันการโพส -->
+    <!-- Pop-up ยืนยันโพสต์ -->
     <div v-if="isConfirm"
-        class="min-h-100 min-w-100 bg-sky-100 rounded-2xl shadow-2xl flex flex-col justify-center items-center fixed left-125 top-25 z-50">
-        <h1>แน่ใจ๊?</h1>
-        <button @click="confirmShow(); handleAddPost();"
-            class="px-4 py-2 text-sm font-medium bg-green-500 rounded-lg hover:bg-green-600 transition duration-150 shadow-md">
-            ยืนยันการโพสต์
-        </button>
-        <button @click="confirmShow();"
-            class="px-4 py-2 text-sm font-medium bg-green-500 rounded-lg hover:bg-green-600 transition duration-150 shadow-md">
-            ยกเลิก
-        </button>
+        class="min-h-35 min-w-80 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl flex flex-col justify-center items-center fixed left-195 top-90 z-50 border border-gray-200">
+        <h1 class="text-2xl font-semibold text-blue-900 mb-4">ยืนยันการโพสต์หรือไม่?</h1>
+        <div class="flex gap-4">
+            <button @click="confirmShow(); handleAddPost();"
+                class="px-5 py-2 bg-blue-900 text-black font-medium rounded-xl hover:bg-blue-950 transition-all duration-200 shadow-md">
+                ✅ ยืนยันโพสต์
+            </button>
+            <button @click="confirmShow();"
+                class="px-5 py-2 bg-gray-300 text-gray-800 font-medium rounded-xl hover:bg-gray-400 transition-all duration-200 shadow-md">
+                ❌ ยกเลิก
+            </button>
+        </div>
     </div>
-    <div class="min-h-150 min-w-150 bg-sky-100 rounded-2xl shadow-2xl flex flex-col items-center fixed left-125 top-25">
-        <!-- วนลูปในตัวแปร 'requests' -->
-        <div v-for="userDummy in userDummys" :key="userDummy.id" class="w-9/10 my-4 p-3 bg-white rounded-lg shadow-md">
-            <h2 class="text-xl font-bold text-sky-700">{{ userDummy.name }}</h2>
-            <p class="text-sm mt-1">{{ userDummy.StdID }}</p>
-            <h1>จะโพสไร?</h1>
-            <div class="flex h-full w-4/5 items-center justify-center">
-                <select v-model="inputTitle"
-                    class="h-12 w-full item-center bg-white border-2 border-gray-300 rounded-lg p-2 text-gray-700 focus:ring-blue-500 focus:border-blue-500">
-                    <option disabled value="">เลือกหัวข้อ (Select Title)</option>
 
+    <!-- กล่องโพสต์หลัก -->
+    <div
+        class="min-h-100 min-w-150 bg-gradient-to-br from-gray-50 to-gray-200 rounded-2xl shadow-2xl flex flex-col items-center fixed left-190 top-30 p-6 overflow-y-auto">
+        <div v-for="userDummy in userDummys" :key="userDummy.id"
+            class="w-11/12 my-4 p-5 bg-white rounded-2xl shadow-md border border-gray-200 hover:shadow-lg transition-all duration-200">
+            <h2 class="text-2xl font-semibold text-blue-900">{{ userDummy.name }}</h2>
+            <p class="text-sm text-gray-500 mb-4">รหัสนิสิต: {{ userDummy.StdID }}</p>
+
+
+            <div class="flex flex-col gap-3">
+                <select v-model="inputTitle"
+                    class="h-12 w-full bg-gray-50 border border-gray-300 rounded-lg px-3 text-gray-700 focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition">
+                    <option disabled value="">เลือกหัวข้อ (Select Title)</option>
                     <option v-for="subject in subjects" :key="subject.name" :value="subject.name">
                         {{ subject.name }}
                     </option>
                 </select>
-                <textarea v-model="inputDetail" placeholder=" รายละเอียด (Detail)" rows="3"
-                    class="w-full item-center p-2 bg-gray-100 rounded-lg border-2 border-gray-300 resize-none"></textarea>
+
+                <textarea v-model="inputDetail" placeholder="รายละเอียดเพิ่มเติม (Detail)" rows="3"
+                    class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition"></textarea>
             </div>
 
-            <button @click="confirmShow"
-                class="px-4 py-2 text-sm font-medium bg-green-500 rounded-lg hover:bg-green-600 transition duration-150 shadow-md">
-                โพสต์
-            </button>
-            <button
-                class="px-4 py-2 text-sm font-medium bg-red-500 rounded-lg hover:bg-red-600 transition duration-150 shadow-md">
-                ไม่โพสต์
-            </button>
+            <div class="flex justify-end gap-3 mt-4">
+                <button @click="confirmShow"
+                    class="px-4 py-2 text-sm font-medium bg-blue-900 text-black rounded-lg hover:bg-blue-950 transition duration-200 shadow-md">
+                    💬 โพสต์
+                </button>
+                <button
+                    class="px-4 py-2 text-sm font-medium bg-gray-500 text-black rounded-lg hover:bg-gray-600 transition duration-200 shadow-md">
+                    🗙 ไม่โพสต์
+                </button>
+            </div>
         </div>
 
-        <!-- ตรวจสอบความยาวของ 'requests' -->
-        <div v-if="userDummys.length === 0">
+        <div v-if="userDummys.length === 0" class="text-gray-500 mt-10">
             <p>ไม่มีรายการคำขอในขณะนี้</p>
         </div>
     </div>
