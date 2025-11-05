@@ -128,10 +128,10 @@ async function confirmPurchase() {
   <div>
     <!-- 🛒 Popup หลัก -->
     <div
-      class="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-lg border border-gray-200 rounded-3xl shadow-2xl w-[380px] h-[380px] flex flex-col items-center p-6 transition-all duration-300 z-40"
+      class="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-lg border border-gray-200 rounded-3xl shadow-2xl w-[380px] h-[330px] flex flex-col items-center p-6 transition-all duration-300 z-40"
     >
-      <h2 class="text-xl font-bold text-gray-800 mb-2">🛒 รายการสั่งซื้อ</h2>
-
+      <h2 class="text-xl font-bold text-gray-800 mb-2 ">🛒 รายการสั่งซื้อ</h2>
+ 
       <img
         :src="image || defaultImage"
         alt="Item Image"

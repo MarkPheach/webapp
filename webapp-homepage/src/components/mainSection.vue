@@ -407,4 +407,5 @@ function sendSeniorAnswer(postId) {
       </div>
     </main>
   </div>
+  
 </template>
