@@ -390,9 +390,6 @@ function sendSeniorAnswer(postId) {
 
 
         <!-- ปุ่มลอย -->
-<<<<<<< HEAD
-        <button v-if="isAdmin" class="fixed right-12 bottom-40 w-15 h-15 shadow-2xl rounded-full" @click="requestShow">
-=======
         <button
           class="fixed right-15 bottom-10 w-15 h-15 bg-blue-900 text-white flex items-center justify-center shadow-2xl rounded-full hover:bg-blue-950 transition"
           @click="postShow">
@@ -401,15 +398,11 @@ function sendSeniorAnswer(postId) {
         <button v-if="isAdmin"
           class="fixed right-15 bottom-30 w-15 h-15 bg-blue-900 text-white flex items-center justify-center shadow-2xl rounded-full hover:bg-blue-950 transition"
           @click="requestShow">
->>>>>>> c53e6e47097a69362ff7652639526487b582c1dd
           <v-icon size="28" color="black">mdi-account-box</v-icon>
         </button>
         <!--<button class="fixed right-12 bottom-40 w-15 h-15 shadow-2xl rounded-full" @click="cartShow">
           <v-icon size="28" color="black">mdi-cart</v-icon>
-        </button>-->
-        <button class="fixed right-12 bottom-20 w-15 h-15 shadow-2xl rounded-full" @click="postShow">
-          <v-icon size="28" color="black">mdi-pencil</v-icon>
-        </button>
+        </button>-->x
 
       </div>
     </main>
