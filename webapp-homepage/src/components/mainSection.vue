@@ -329,7 +329,7 @@ function sendSeniorAnswer(postId) {
           <div class="bg-slate-50 rounded-lg border border-gray-200 px-3 py-2 mb-3">
             <div v-for="(comment, index) in post.comment.slice(0, 3)" :key="index"
               class="mb-2 p-2 bg-white rounded-lg shadow-sm border-l-4 border-sky-400">
-              <p class="text-sm text-gray-800">{{ comment }}</p>
+              <p class="text-sm text-gray-800">&nbsp;&nbsp;{{ comment }}</p>
             </div>
 
             <!-- ✅ ปุ่มดูเพิ่มเติม -->
