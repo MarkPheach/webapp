@@ -2,8 +2,10 @@
 import { ref } from 'vue';
 import { useUserRequest } from '../../stores/request';
 import { storeToRefs } from 'pinia';
+import { useSubject } from "../../stores/subject";
 
 const { userRequests } = storeToRefs(useUserRequest());
+const { subjects } = storeToRefs(useSubject());
 const selectedRequest = ref({});
 
 const isEdit = ref(false);
@@ -54,15 +56,30 @@ function editRequest() {
         </h2>
 
         <div class="flex flex-col w-full items-center justify-center gap-3 mt-4">
-            <!-- inputTitle และ inputDetail ถูก set ค่าเริ่มต้นใน editShow แล้ว -->
+
+            <!-- หัวข้อสำหรับ Dropdown (Title) -->
             <h2 class="text-xl font-bold text-sky-300">
-                หัวข้อ :
+                หัวข้อใหม่ :
             </h2>
-            <input type="text" v-model="inputTitle" placeholder=" ชื่อหัวข้อใหม่ (Title)"
-                class="p-2 w-full bg-gray-100 rounded-lg border-2 border-gray-300">
+
+            <!-- DROP DOWN BOX (แทนที่ input type="text") -->
+            <select v-model="inputTitle"
+                class="p-2 w-full h-12 bg-gray-100 rounded-lg border-2 border-gray-300 text-gray-700 focus:ring-blue-500 focus:border-blue-500">
+
+                <option disabled value="">เลือกหัวข้อใหม่ (Select Title)</option>
+
+                <!-- ต้องมีตัวแปร `subjects` ที่ถูกดึงมาจาก Pinia Store หรือ ref() -->
+                <option v-for="subject in subjects" :key="subject.id" :value="subject.name">
+                    {{ subject.name }}
+                </option>
+            </select>
+
+            <!-- หัวข้อสำหรับรายละเอียด (Detail) -->
             <h2 class="text-xl font-bold text-sky-300">
-                รายละเอียด :
+                แก้ไขรายละเอียด :
             </h2>
+
+            <!-- TEXTAREA (รายละเอียด) ยังคงเดิม -->
             <textarea v-model="inputDetail" placeholder=" รายละเอียดใหม่ (Detail)" rows="3"
                 class="w-full p-2 bg-gray-100 rounded-lg border-2 border-gray-300 resize-none"></textarea>
         </div>

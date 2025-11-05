@@ -3,9 +3,10 @@ import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useUserDummy } from '../../stores/userDummy';
 import { useRequest } from '../../stores/request';
+import { useSubject } from "../../stores/subject";
 
 const { userDummys } = storeToRefs(useUserDummy());
-const { requests } = storeToRefs(useRequest());
+const { subjects } = storeToRefs(useSubject());
 const isConfirm = ref(false);
 const inputTitle = ref('');
 const inputDetail = ref('');
@@ -51,8 +52,14 @@ function confirmShow() {
             <p class="text-sm mt-1">{{ userDummy.StdID }}</p>
             <h1>จะโพสไร?</h1>
             <div class="flex h-full w-4/5 items-center justify-center">
-                <input type="text" v-model="inputTitle" placeholder=" ชื่อหัวข้อ (Title)"
-                    class="h-1/2 w-full item-center bg-white rounded-lg">
+                <select v-model="inputTitle"
+                    class="h-12 w-full item-center bg-white border-2 border-gray-300 rounded-lg p-2 text-gray-700 focus:ring-blue-500 focus:border-blue-500">
+                    <option disabled value="">เลือกหัวข้อ (Select Title)</option>
+
+                    <option v-for="subject in subjects" :key="subject.name" :value="subject.name">
+                        {{ subject.name }}
+                    </option>
+                </select>
                 <textarea v-model="inputDetail" placeholder=" รายละเอียด (Detail)" rows="3"
                     class="w-full item-center p-2 bg-gray-100 rounded-lg border-2 border-gray-300 resize-none"></textarea>
             </div>
