@@ -24,7 +24,7 @@ function purchasePopup(name, price) {
                     elevation="4">
                     <!-- รูปสินค้า -->
                     <div class="flex justify-center mb-2">
-                        <v-img src="public/chibi/test.gif" alt="จิบิ" width="80" height="80" contain
+                        <v-img src="public/chibi/Mutsumi.gif" alt="จิบิ" width="80" height="80" contain
                             class="rounded-full mb-2"></v-img>
                     </div>
                     <!-- ชื่อสินค้า -->
@@ -49,7 +49,7 @@ function purchasePopup(name, price) {
                     elevation="4">
                         <!-- รูปสินค้า -->
                         <div class="flex justify-center mb-2">
-                            <v-img src="public/chibi/chibi1.gif" alt="จิบิ" width="80" height="80"
+                            <v-img src="public/chibi/adventer.gif" alt="จิบิ" width="80" height="80"
                                 contain class="rounded-full mb-2"></v-img>
                         </div>
                         <!-- ชื่อสินค้า -->

@@ -1,13 +1,17 @@
 <script setup>
-import { ref } from 'vue';
-import 'primeicons/primeicons.css';
+import { ref } from "vue";
+import "primeicons/primeicons.css";
+import { storeToRefs } from "pinia";
+import { useUserDummy } from "../stores/userDummy";
+
+const userDummyStore = useUserDummy();
 const showDropdown = ref(false);
 </script>
 
 <template>
   <header
-    class="flex items-center justify-between bg-gradient-to-r from-blue-900 to-sky-600 text-white sticky top-0 left-0 w-full z-50 px-6 h-[10vh] shadow-md">
-
+    class="flex items-center justify-between bg-gradient-to-r from-blue-900 to-sky-600 text-white sticky top-0 left-0 w-full z-50 px-6 h-[10vh] shadow-md"
+  >
     <!-- โลโก้ -->
     <div class="flex items-center gap-3">
       <img
@@ -15,15 +19,18 @@ const showDropdown = ref(false);
         alt="Logo"
         class="h-[60px] w-auto rounded-2xl shadow-md bg-white/10 p-1"
       />
-      <h1 class="text-2xl font-semibold tracking-wide drop-shadow">CourseHub</h1>
+      <h1 class="text-2xl font-semibold tracking-wide drop-shadow">
+        CourseHub
+      </h1>
     </div>
 
     <!-- กล่องค้นหา + ตัวกรอง -->
     <div class="flex items-center gap-4 w-1/2">
-
       <!-- ช่องค้นหา -->
       <div class="relative w-2/3">
-        <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+        <i
+          class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+        ></i>
         <input
           type="text"
           placeholder="ค้นหารายวิชา..."
@@ -55,7 +62,9 @@ const showDropdown = ref(false);
           class="absolute right-0 top-[110%] z-50 bg-white text-blue-900 font-medium shadow-xl rounded-xl overflow-hidden w-full animate-fadeIn"
         >
           <li class="hover:bg-sky-100 px-4 py-2 cursor-pointer">ทุกรายวิชา</li>
-          <li class="hover:bg-sky-100 px-4 py-2 cursor-pointer">รายวิชาที่เลือก</li>
+          <li class="hover:bg-sky-100 px-4 py-2 cursor-pointer">
+            รายวิชาที่เลือก
+          </li>
           <li class="hover:bg-sky-100 px-4 py-2 cursor-pointer">อื่นๆ</li>
         </ul>
       </div>
@@ -63,9 +72,11 @@ const showDropdown = ref(false);
 
     <!-- คะแนน + Logout -->
     <div class="flex items-center gap-4">
-      <div class="relative flex items-center bg-white/90 rounded-xl px-4 py-1 shadow-sm text-black font-semibold">
+      <div
+        class="relative flex items-center bg-white/90 rounded-xl px-4 py-1 shadow-sm text-black font-semibold"
+      >
         <i class="pi pi-star-fill text-yellow-500 mr-2"></i>
-        <span>110</span>
+        <span> {{ userDummyStore.userDummys[0].point }} </span>
       </div>
 
       <router-link to="/login">
