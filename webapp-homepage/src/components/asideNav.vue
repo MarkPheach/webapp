@@ -5,6 +5,16 @@
     <!-- user detail -->
     <div
       class="w-[90%] bg-white/10 backdrop-blur-md rounded-2xl flex flex-col justify-center items-start my-5 p-3 text-xs shadow-md">
+
+      <!--Profile-->
+      <div class="flex flex-col items-center w-full">
+        <Tooltip content="ดูโปรไฟล์ของคุณ" placement="right">
+          <v-avatar size="60" class="mb-3 shadow-lg cursor-pointer">
+            <v-img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"></v-img>
+          </v-avatar>
+        </Tooltip>
+      </div>
+
       <h1 class="font-semibold text-base mb-1">👤 UserName</h1>
       <p>ID: <span class="text-blue-200">studentID</span></p>
       <p>Faculty: <span class="text-blue-200">studentFaculty</span></p>
@@ -47,4 +57,5 @@
 </template>
 
 <script setup>
+import Tooltip from './Tooltip.vue';
 </script>

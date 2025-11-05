@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import chibiGif from '/public/chibi/Mutsumi.gif'
+import chibiGif from '/public/chibi/chibi-tachyon.gif'
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
 
 const position = ref({ x: 100, y: 100 })

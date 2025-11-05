@@ -17,7 +17,7 @@ const showDropdown = ref(false);
       <img
         src="../assets/CU_DEPT_LOGO.png"
         alt="Logo"
-        class="h-[60px] w-auto rounded-2xl shadow-md bg-white/10 p-1"
+        class="h-[60px] w-auto rounded-2xl shadow-md bg-white p-1"
       />
       <h1 class="text-2xl font-semibold tracking-wide drop-shadow">
         CourseHub

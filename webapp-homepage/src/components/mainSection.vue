@@ -267,7 +267,7 @@ function sendSeniorAnswer(postId) {
           <button class="px-3 py-1 bg-white rounded-full transition duration-150 shadow-sm" @click="userRequestShow">
             <p class="text-gray-500 ">จัดการโพส</p>
           </button>
-          <userRequest v-if="isUserRequest"/>
+          <userRequest v-if="isUserRequest" />
         </div>
         <!-- post -->
         <div v-for="post in posts" :key="post.id"
@@ -311,15 +311,16 @@ function sendSeniorAnswer(postId) {
         </div>
 
         <!-- ปุ่มลอย -->
-        <button class="fixed right-15 bottom-30 w-15 h-15 shadow-2xl rounded-full" @click="cartShow">
-          <v-icon size="28" color="black">mdi-cart</v-icon>
-        </button>
-        <button class="fixed right-15 bottom-10 w-15 h-15 shadow-2xl rounded-full" @click="postShow">
-          <v-icon size="28" color="black">mdi-pencil</v-icon>
-        </button>
-        <button v-if="isAdmin" class="fixed right-15 bottom-50 w-15 h-15 shadow-2xl rounded-full" @click="requestShow">
+        <button v-if="isAdmin" class="fixed right-12 bottom-40 w-15 h-15 shadow-2xl rounded-full" @click="requestShow">
           <v-icon size="28" color="black">mdi-account-box</v-icon>
         </button>
+        <!--<button class="fixed right-12 bottom-40 w-15 h-15 shadow-2xl rounded-full" @click="cartShow">
+          <v-icon size="28" color="black">mdi-cart</v-icon>
+        </button>-->
+        <button class="fixed right-12 bottom-20 w-15 h-15 shadow-2xl rounded-full" @click="postShow">
+          <v-icon size="28" color="black">mdi-pencil</v-icon>
+        </button>
+
       </div>
     </main>
   </div>

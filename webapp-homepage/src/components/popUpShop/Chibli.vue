@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue';
 import purchase from './purchase.vue';
+import { useChibi } from '../../stores/chibi.js';
+const chibiStore = useChibi();
+
 
 const selectedPurchase = ref('Nikka1')
 const selectedPrice = ref(0)
@@ -18,9 +21,10 @@ function purchasePopup(name, price) {
     <div>
         <!--โปรไฟล์เฟรม 1-->
         <div>
-            <button @click="purchasePopup('Chibli1', 100)">
+            <button @click="purchasePopup(chibiStore.chibis[0].name, chibiStore.chibis[0].price)"
+>
                 <v-card
-                    class="absolute left-22 top-10 w-[180px] h-[155px] bg-white rounded-xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition"
+                    class="absolute left-22 top-10 w-[180px] h-[180px] bg-white rounded-xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition"
                     elevation="4">
                     <!-- รูปสินค้า -->
                     <div class="flex justify-center mb-2">
@@ -37,15 +41,18 @@ function purchasePopup(name, price) {
                         <v-icon color="amber" size="22">mdi-cash</v-icon>
                         <span class="font-bold text-base">100</span>
                     </div>
+                    <div>
+                        {{ chibiStore.chibis[0].state }}
+                    </div>
                 </v-card>
             </button>
         </div>
 
         <!--โปรไฟล์เฟรม 2-->
         <div>
-            <button @click="purchasePopup('Chibli2', 100)">
+            <button @click="purchasePopup(chibiStore.chibis[1].name, chibiStore.chibis[1].price)">
                 <v-card
-                    class="absolute left-88 bottom-30.5 w-[180px] h-[155px] bg-white rounded-xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition"
+                    class="absolute left-88 bottom-36 w-[180px] h-[180px] bg-white rounded-xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition"
                     elevation="4">
                         <!-- รูปสินค้า -->
                         <div class="flex justify-center mb-2">
@@ -61,15 +68,18 @@ function purchasePopup(name, price) {
                             <v-icon color="amber" size="22">mdi-cash</v-icon>
                             <span class="font-bold text-base">100</span>
                         </div>
+                        <div>
+                            {{ chibiStore.chibis[1].state }}
+                        </div>
                 </v-card>
             </button>
         </div>
 
         <!--โปรไฟล์เฟรม 3-->
         <div>
-            <button @click="purchasePopup('Chibli3', 100)">
+            <button @click="purchasePopup(chibiStore.chibis[3].name, chibiStore.chibis[3].price)">
                 <v-card
-                    class="absolute left-152 bottom-71 w-[180px] h-[155px] bg-white rounded-xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition"
+                    class="absolute left-152 bottom-82 w-[180px] h-[180px] bg-white rounded-xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition"
                     elevation="4">
                         <!-- รูปสินค้า -->
                         <div class="flex justify-center mb-2">
@@ -85,15 +95,18 @@ function purchasePopup(name, price) {
                             <v-icon color="amber" size="22">mdi-cash</v-icon>
                             <span class="font-bold text-base">100</span>
                         </div>
+                        <div>
+                            {{ chibiStore.chibis[3].state }}
+                        </div>
                 </v-card>
             </button>
         </div>
 
         <!--โปรไฟล์เฟรม 4-->
         <div>
-            <button @click="purchasePopup('Chibli4', 100)">
+            <button @click="purchasePopup(chibiStore.chibis[2].name, chibiStore.chibis[2].price)">
                 <v-card
-                    class="absolute left-218 bottom-111 w-[180px] h-[155px] bg-white rounded-xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition"
+                    class="absolute left-218 bottom-129 w-[180px] h-[180px] bg-white rounded-xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition"
                     elevation="4">
                         <!-- รูปสินค้า -->
                         <div class="flex justify-center mb-2">
@@ -108,6 +121,9 @@ function purchasePopup(name, price) {
                         <div class="flex items-center justify-center gap-1">
                             <v-icon color="amber" size="22">mdi-cash</v-icon>
                             <span class="font-bold text-base">100</span>
+                        </div>
+                        <div class="flex item-center justify-center">
+                            {{ chibiStore.chibis[2].state }}
                         </div>
                 </v-card>
             </button>

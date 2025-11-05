@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import purchase from './purchase.vue';
+import {useFloating} from '@floating-ui/vue';
 
 const selectedPurchase = ref('Nikka1')
 const selectedPrice = ref(0)
