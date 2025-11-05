@@ -24,51 +24,7 @@ const showDropdown = ref(false);
       </h1>
     </div>
 
-    <!-- กล่องค้นหา + ตัวกรอง -->
-    <div class="flex items-center gap-4 w-1/2">
-      <!-- ช่องค้นหา -->
-      <div class="relative w-2/3">
-        <i
-          class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-        ></i>
-        <input
-          type="text"
-          placeholder="ค้นหารายวิชา..."
-          class="w-full h-[45px] rounded-xl bg-white/90 text-black pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-sky-400 placeholder-gray-400 shadow-sm"
-        />
-      </div>
-
-      <!-- ปุ่มกรองรายวิชา -->
-      <div class="relative w-[180px]">
-        <button
-          @click="showDropdown = !showDropdown"
-          class="w-full flex justify-between items-center bg-white text-blue-900 font-semibold rounded-xl px-4 py-2 shadow-md hover:bg-sky-100 transition-all duration-200"
-        >
-          กรองรายวิชา
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 transition-transform duration-200 ease-in-out"
-            :class="showDropdown ? 'rotate-180' : 'rotate-0'"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path d="M5.5 7.5L10 12l4.5-4.5H5.5z" />
-          </svg>
-        </button>
-
-        <!-- dropdown -->
-        <ul
-          v-show="showDropdown"
-          class="absolute right-0 top-[110%] z-50 bg-white text-blue-900 font-medium shadow-xl rounded-xl overflow-hidden w-full animate-fadeIn"
-        >
-          <li class="hover:bg-sky-100 px-4 py-2 cursor-pointer">ทุกรายวิชา</li>
-          <li class="hover:bg-sky-100 px-4 py-2 cursor-pointer">
-            รายวิชาที่เลือก
-          </li>
-          <li class="hover:bg-sky-100 px-4 py-2 cursor-pointer">อื่นๆ</li>
-        </ul>
-      </div>
-    </div>
+    
 
     <!-- คะแนน + Logout -->
     <div class="flex items-center gap-4">

@@ -200,16 +200,16 @@ function sendSeniorAnswer(postId) {
           <!-- โพสต์ต้นฉบับ -->
           <div v-if="currentPost" class="mb-4 p-3 bg-slate-50 rounded-lg border border-gray-200 shadow-sm">
             <h4 class="font-semibold text-blue-900 text-sm">
-              Review: {{ currentPost.review }} | Title: {{ currentPost.title }}
+             &nbsp;&nbsp; Review: {{ currentPost.review }} | Title: {{ currentPost.title }}
             </h4>
-            <p class="text-xs text-gray-600 mt-1">{{ currentPost.detail }}</p>
+            <p class="text-xs text-gray-600 mt-1"> &nbsp;&nbsp;&nbsp;{{ currentPost.detail }}</p>
             <p class="text-[10px] text-blue-600 italic mt-1 border-t pt-1">
-              {{ currentPost.comment.join(' | ') }}
+              &nbsp;&nbsp;&nbsp;{{ currentPost.comment.join(' | ') }}
             </p>
           </div>
 
           <h3 class="font-bold text-lg mb-2 text-gray-700">
-            คำตอบจากรุ่นพี่ ({{ getSeniorAnswer(activePostId).length }})
+            &nbsp;คำตอบจากรุ่นพี่ ({{ getSeniorAnswer(activePostId).length }})
           </h3>
 
           <!-- ✅ แสดงคำตอบ + ปุ่มให้คะแนนแต่ละคอมเมนต์ -->
@@ -217,7 +217,7 @@ function sendSeniorAnswer(postId) {
             class="flex-grow overflow-y-auto bg-gradient-to-br from-slate-50 to-slate-100 p-3 rounded-lg mb-3 border border-gray-200">
             <div v-for="(answer, index) in currentPost.comment" :key="index"
               class="mb-3 p-3 bg-white rounded-xl shadow-sm border-l-4 border-blue-700">
-              <p class="text-gray-800 text-sm whitespace-pre-wrap">{{ answer }}</p>
+              <p class="text-gray-800 text-sm whitespace-pre-wrap">&nbsp;&nbsp;&nbsp;{{ answer }}</p>
               <button @click="reviewCommentShow(activePostId, index)"
                 class="px-3 py-1 text-xs font-medium rounded-full transition duration-150 shadow-sm text-gray-800"
                 :class="ratings[`comment-${activePostId}-${index}`]
