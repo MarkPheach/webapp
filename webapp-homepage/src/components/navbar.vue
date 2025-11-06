@@ -20,7 +20,7 @@ const logout = () => {
 
 <template>
   <header
-    class="flex items-center justify-between bg-gradient-to-r from-blue-900 to-sky-600 text-white sticky top-0 left-0 w-full z-50 px-6 h-[10vh] shadow-md"
+    class="flex items-center justify-between bg-gradient-to-r from-blue-900 to-sky-600 text-white fixed top-0 left-0 w-full z-50 px-6 h-[10vh] shadow-md"
   >
     <!-- โลโก้ -->
     <div class="flex items-center gap-3">

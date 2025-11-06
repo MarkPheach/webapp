@@ -7,6 +7,7 @@ import Shop from '../components/Shop.vue';
 
 <template>
   <div>
+            <div class="h-[8vh]"></div>
     <navbar/>
     <asideNav/>
     <Shop/>

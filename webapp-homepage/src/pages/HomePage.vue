@@ -6,6 +6,8 @@ import mainSection from '../components/mainSection.vue';
 
 <template>
   <div>
+        <div class="h-[10vh]"></div>
+
     <navbar/>
     <asideNav/>
     <mainSection/>

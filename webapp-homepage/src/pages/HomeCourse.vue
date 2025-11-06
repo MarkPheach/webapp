@@ -8,6 +8,8 @@ import Course from '../components/course.vue';
 
 <template>
   <div>
+    <div class="h-[8vh]"></div>
+
     <navbar/>
     <asideNav/>
     <Course/> 

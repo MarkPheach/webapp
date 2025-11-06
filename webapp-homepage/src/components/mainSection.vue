@@ -127,37 +127,79 @@ const hasSelected = ref(false);
 function selectStar(star) {
   const key = `${reviewType.value}-${reviewTargetId.value}`;
 
-  // ถ้ากดซ้ำดาวเดิม -> ลบดาวออก
+  // ✅ ดึง email จาก localStorage
+  const storedUser = JSON.parse(localStorage.getItem("userDetail") || "{}");
+  const email = storedUser.email || "anonymous";
+
   if (ratings.value[key] === star) {
     delete ratings.value[key];
     selectedStar.value = 0;
     hasSelected.value = false;
 
     if (reviewType.value === 'post') {
-      postStore.updatePostRating(reviewTargetId.value, 'anonymous', 0);
+      postStore.updatePostRating(reviewTargetId.value, email, 0);
     } else if (reviewType.value === 'comment') {
       const [postId, commentIndex] = reviewTargetId.value.split('-');
-      postStore.updateCommentRating(postId, commentIndex, 'anonymous', 0);
+      postStore.updateCommentRating(postId, commentIndex, email, 0);
     }
   } else {
-    // ให้ดาวใหม่
     ratings.value[key] = star;
     selectedStar.value = star;
     hasSelected.value = true;
 
     if (reviewType.value === 'post') {
-      postStore.updatePostRating(reviewTargetId.value, 'anonymous', star);
+      postStore.updatePostRating(reviewTargetId.value, email, star);
     } else if (reviewType.value === 'comment') {
       const [postId, commentIndex] = reviewTargetId.value.split('-');
-      postStore.updateCommentRating(postId, commentIndex, 'anonymous', star);
+      postStore.updateCommentRating(postId, commentIndex, email, star);
     }
   }
 }
+
 
 function getEmoji(star) {
   const emojis = ['⭐1', '⭐2', '⭐3', '⭐4', '⭐5'];
   return emojis[star - 1] || '';
 }
+
+// ✅ ดึงคะแนนของ user ปัจจุบันในแต่ละคอมเมนต์
+function getUserCommentRating(post, commentIndex) {
+  if (!post || !post.ratings || !post.ratings.comment) return null;
+
+  const storedUser = JSON.parse(localStorage.getItem("userDetail") || "{}");
+  const email = storedUser.email || "";
+
+  const commentRatings = post.ratings.comment[commentIndex];
+  if (!commentRatings) return null;
+
+  return commentRatings[email] || null;
+}
+
+// ✅ ดึงค่าคะแนนของ user ปัจจุบันในโพสต์หลัก
+function getUserPostRating(post) {
+  if (!post || !post.ratings || !post.ratings.post) return null;
+
+  const storedUser = JSON.parse(localStorage.getItem("userDetail") || "{}");
+  const email = storedUser.email || "";
+
+  return post.ratings.post[email] || null;
+}
+
+// ✅ คำนวณค่าเฉลี่ยของคะแนนโพสต์
+function getPostAverage(post) {
+  if (!post?.ratings?.post) return 0;
+
+  const ratings = Object.values(post.ratings.post);
+  if (ratings.length === 0) return 0;
+
+  const sum = ratings.reduce((a, b) => a + b, 0);
+  const avg = sum / ratings.length;
+
+  // ปัดทศนิยม 1 ตำแหน่ง เช่น 4.25 → 4.3
+  return avg.toFixed(1);
+}
+
+
 
 // --- คำตอบรุ่นพี่ ---
 function getSeniorAnswer(postId) {
@@ -224,7 +266,7 @@ function sendSeniorAnswer(postId) {
               </div>
 
               <div v-else class="text-lg text-gray-800 font-bold mt-2 mx-2">
-                คุณให้คะแนน {{ getEmoji(selectedStar) }}
+                คุณให้คะแนนคอมเมนต์ {{ getEmoji(selectedStar) }}
               </div>
 
               <button @click="closeReview"
@@ -256,16 +298,19 @@ function sendSeniorAnswer(postId) {
               class="mb-3 p-3 bg-white rounded-xl shadow-sm border-l-4 border-blue-700">
               <p class="text-sm text-gray-400">&nbsp;&nbsp;User : {{answer.user}}</p>
               <p class="text-sm text-gray-700">&nbsp;&nbsp;&nbsp;&nbsp;{{answer.text}}</p>
-              <button @click="reviewCommentShow(activePostId, index)"
+              <button
+                @click="reviewCommentShow(activePostId, index)"
                 class="px-3 py-1 text-xs font-medium rounded-full transition duration-150 shadow-sm text-gray-800"
-                :class="ratings[`comment-${activePostId}-${index}`]
+                :class="getUserCommentRating(currentPost, index)
                   ? 'bg-yellow-300 hover:bg-yellow-400'
-                  : 'bg-blue-100 hover:bg-blue-200'">
-                <template v-if="ratings[`comment-${activePostId}-${index}`]">
-                  คุณให้ {{ getEmoji(ratings[`comment-${activePostId}-${index}`]) }}
+                  : 'bg-blue-100 hover:bg-blue-200'"
+              >
+                <template v-if="getUserCommentRating(currentPost, index)">
+                  คุณให้คอมเมนต์นี้ {{ getEmoji(getUserCommentRating(currentPost, index)) }}
                 </template>
                 <template v-else>ให้คะแนนคอมเมนต์</template>
               </button>
+
             </div>
 
             <p v-if="currentPost.comment.length === 0" class="text-gray-400 text-sm text-center py-4">
@@ -286,21 +331,6 @@ function sendSeniorAnswer(postId) {
         </div>
       </div>
     </div>
-
-    <!-- ✅ popup ให้คะแนนโพสต์ -->
-    <div class="flex gap-2 mt-3 relative">
-    </div>
-    <!-- ปุ่มให้คะแนน -->
-    <button @click="reviewShow(post.id)"
-      class="px-3 py-1 text-xs font-medium rounded-full transition duration-150 shadow-sm text-black" :class="ratings[`post-${post.id}`]
-        ? 'bg-yellow-300 hover:bg-yellow-400'
-        : 'bg-orange-200 hover:bg-orange-300'
-        ">
-      <template v-if="ratings[`post-${post.id}`]">
-        คุณให้ {{ getEmoji(ratings[`post-${post.id}`]) }}
-      </template>
-      <template v-else>ให้คะแนน</template>
-    </button>
 
     <!-- ✅ กล่องให้คะแนน (แสดงเฉพาะตอนเลือกโพสต์นี้) -->
     <div v-if="isReview && reviewType === 'post' && reviewTargetId === post.id"
@@ -344,8 +374,9 @@ function sendSeniorAnswer(postId) {
         <div v-for="post in posts" :key="post.id"
           class="w-9/10 my-4 bg-white rounded-xl shadow-lg border border-gray-100 py-4 px-6">
           <h2 class="text-lg font-bold text-sky-800 mb-1">
-            Rating: {{ post.review }}⭐ | {{ post.name }} โพสในหัวข้อ: {{ post.title }} 
+            Rating: {{ getPostAverage(post) }}⭐ | {{ post.name }} โพสในหัวข้อ: {{ post.title }}
           </h2>
+
 
           <!-- ✅ แสดงเวลาโพสต์ -->
           <p v-if="post.createdAt" class="text-xs text-gray-500 italic mb-2">
@@ -386,16 +417,20 @@ function sendSeniorAnswer(postId) {
 
           <div class="flex gap-2 mt-3 relative">
             <!-- ปุ่มให้คะแนน -->
-            <button @click="reviewShow(post.id)"
-              class="px-3 py-1 text-xs font-medium rounded-full transition duration-150 shadow-sm text-black" :class="ratings[`post-${post.id}`]
-                ? 'bg-yellow-300 hover:bg-yellow-400'
-                : 'bg-orange-200 hover:bg-orange-300'
-                ">
-              <template v-if="ratings[`post-${post.id}`]">
-                คุณให้ {{ getEmoji(ratings[`post-${post.id}`]) }}
-              </template>
-              <template v-else>ให้คะแนน</template>
-            </button>
+          <button
+            @click="reviewShow(post.id)"
+            class="px-3 py-1 text-xs font-medium rounded-full transition duration-150 shadow-sm text-black"
+            :class="getUserPostRating(post)
+              ? 'bg-yellow-300 hover:bg-yellow-400'
+              : 'bg-orange-200 hover:bg-orange-300'"
+          >
+            <template v-if="getUserPostRating(post)">
+              คุณให้ {{ getEmoji(getUserPostRating(post)) }}
+            </template>
+            <template v-else>
+              ให้คะแนน
+            </template>
+          </button>
 
             <!-- ✅ กล่องให้คะแนน (อยู่ในแต่ละโพสต์) -->
             <div v-if="isReview && reviewType === 'post' && reviewTargetId === post.id"

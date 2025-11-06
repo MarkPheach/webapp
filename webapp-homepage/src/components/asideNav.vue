@@ -1,6 +1,6 @@
 <template>
   <aside
-    class="fixed left-0 top-[10vh] h-[90vh] w-[15vw] bg-gradient-to-b from-blue-900 to-blue-700 flex flex-col items-center text-white shadow-2xl rounded-tr-2xl">
+    class="fixed left-0 top-[10vh] h-[90vh] w-[15vw] bg-gradient-to-b from-blue-900 to-blue-700 flex flex-col items-center text-white shadow-2xl">
 
     <!-- user detail -->
     <div

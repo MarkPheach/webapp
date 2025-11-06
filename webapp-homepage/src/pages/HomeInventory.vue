@@ -7,6 +7,8 @@ import Inventory from '../components/Inventory.vue';
 
 <template>
   <div>
+        <div class="h-[8vh]"></div>
+
     <navbar/>
     <asideNav/>
     <Inventory />
