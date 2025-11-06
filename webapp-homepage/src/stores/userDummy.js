@@ -7,7 +7,7 @@ export const useUserDummy = defineStore("userDummy", () => {
       id: 1,
       StdID: "673380000-0",
       name: "นาย สมชาย ใจดี",
-      point: '5000',
+      point: '100',
     },
   ]);
 

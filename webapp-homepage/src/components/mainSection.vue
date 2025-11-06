@@ -3,17 +3,17 @@ import { ref, computed, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { usePost } from '../stores/post';
 import { useUserRequest } from '../stores/request';
-import cart from './popUpScreen/cart.vue';
 import post from './popUpScreen/post.vue';
 import request from './popUpScreen/request.vue';
 import userRequest from './popUpScreen/userRequest.vue';
+import { get } from 'firebase/database';
 
 // --- Popup / UI ---
-const isCart = ref(false);
 const isPost = ref(false);
-const isRequest = ref(false);
 const isAdmin = ref(true);
 const isUserRequest = ref(false);
+const isRequest = ref(false);
+const selectedPostId = ref(null);
 
 // --- Store ---
 const postStore = usePost();
@@ -68,6 +68,12 @@ function formatComment(comment) {
   return `${studentID} (${timeString}): ${text}`;
 }
 
+function getEmail() {
+  const storedUser = JSON.parse(localStorage.getItem("userDetail") || "{}");
+  const email = storedUser.email || "anonymous";
+  return email;
+}
+
 
 
 // --- ฟังก์ชัน popup review ---
@@ -94,20 +100,13 @@ function reviewCommentShow(postId, commentIndex) {
 }
 
 // --- Toggle popup ---
-function cartShow() {
-  isCart.value = !isCart.value;
-  isPost.value = false;
-  isRequest.value = false;
-}
 function postShow() {
   isPost.value = !isPost.value;
-  isCart.value = false;
   isRequest.value = false;
 }
 function requestShow() {
   isRequest.value = !isRequest.value;
   isPost.value = false;
-  isCart.value = false;
 }
 function userRequestShow() {
   isUserRequest.value = !isUserRequest.value;
@@ -232,10 +231,8 @@ function sendSeniorAnswer(postId) {
 
 <template>
   <div>
-    <cart v-if="isCart" />
     <post v-if="isPost" />
-    <request v-if="isRequest" />
-
+    <request v-if="isRequest" @close="isRequest = false" :post-id="selectedPostId" />
     <!-- ✅ POPUP คำตอบรุ่นพี่ -->
     <div v-if="activePostId !== null"
       class="fixed inset-0 flex items-center justify-center z-[999] bg-black/50 backdrop-blur-sm">
@@ -279,7 +276,7 @@ function sendSeniorAnswer(postId) {
           <!-- โพสต์ต้นฉบับ -->
           <div v-if="currentPost" class="mb-4 p-3 bg-slate-50 rounded-lg border border-gray-200 shadow-sm">
             <h4 class="font-semibold text-blue-900 text-sm">
-             &nbsp;&nbsp; Review: {{ currentPost.review }} | Title: {{ currentPost.title }}
+              &nbsp;&nbsp; Review: {{ currentPost.review }} | Title: {{ currentPost.title }}
             </h4>
             <p class="text-xs text-gray-600 mt-1"> &nbsp;&nbsp;&nbsp;{{ currentPost.detail }}</p>
             <p class="text-[10px] text-blue-600 italic mt-1 border-t pt-1">
@@ -296,15 +293,13 @@ function sendSeniorAnswer(postId) {
             class="flex-grow overflow-y-auto bg-gradient-to-br from-slate-50 to-slate-100 p-3 rounded-lg mb-3 border border-gray-200">
             <div v-for="(answer, index) in currentPost.comment" :key="index"
               class="mb-3 p-3 bg-white rounded-xl shadow-sm border-l-4 border-blue-700">
-              <p class="text-sm text-gray-400">&nbsp;&nbsp;User : {{answer.user}}</p>
-              <p class="text-sm text-gray-700">&nbsp;&nbsp;&nbsp;&nbsp;{{answer.text}}</p>
-              <button
-                @click="reviewCommentShow(activePostId, index)"
+              <p class="text-sm text-gray-400">&nbsp;&nbsp;User : {{ answer.user }}</p>
+              <p class="text-sm text-gray-700">&nbsp;&nbsp;&nbsp;&nbsp;{{ answer.text }}</p>
+              <button @click="reviewCommentShow(activePostId, index)"
                 class="px-3 py-1 text-xs font-medium rounded-full transition duration-150 shadow-sm text-gray-800"
                 :class="getUserCommentRating(currentPost, index)
                   ? 'bg-yellow-300 hover:bg-yellow-400'
-                  : 'bg-blue-100 hover:bg-blue-200'"
-              >
+                  : 'bg-blue-100 hover:bg-blue-200'">
                 <template v-if="getUserCommentRating(currentPost, index)">
                   คุณให้คอมเมนต์นี้ {{ getEmoji(getUserCommentRating(currentPost, index)) }}
                 </template>
@@ -358,17 +353,15 @@ function sendSeniorAnswer(postId) {
     <main class="flex justify-around min-h-[90vh] min-w-screen">
       <div class="flex flex-col float-right h-170 w-300 rounded-2xl mr-12 mt-3">
         <!-- request -->
-        <div id="request"
+       <!-- <div id="request"
           class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl flex flex-col items-left justify-center w-9/10 py-5 px-6 border border-gray-200 shadow-lg">
           <h1 class="text-xl font-semibold text-blue-900 mb-1">โพสต์ที่รอดำเนินการ</h1>
           <p class="text-gray-600 mb-2">{{ useUserRequest().userRequests.length }} โพสต์</p>
-          <button
-            class="px-4 py-1 bg-blue-900 text-black rounded-full transition duration-150 shadow-sm hover:bg-blue-950"
-            @click="userRequestShow">
+          <button v-if="post.email === currentUserEmail" @click="editPost(post.id)"
+            class="absolute top-3 right-3 px-3 py-1 text-xs font-medium bg-blue-900 hover:bg-blue-950 text-white rounded-full transition duration-150 shadow-sm">
             จัดการโพสต์
           </button>
-          <userRequest v-if="isUserRequest" />
-        </div>
+        </div>-->
 
         <!-- post -->
         <div v-for="post in posts" :key="post.id"
@@ -398,8 +391,8 @@ function sendSeniorAnswer(postId) {
           <div class="bg-slate-50 rounded-lg border border-gray-200 px-3 py-2 mb-3">
             <div v-for="(comment, index) in post.comment.slice(0, 3)" :key="index"
               class="mb-2 p-2 bg-white rounded-lg shadow-sm border-l-4 border-sky-400">
-              <p class="text-sm text-gray-400">&nbsp;&nbsp;User : {{comment.user}}</p>
-              <p class="text-sm text-gray-700">&nbsp;&nbsp;&nbsp;&nbsp;{{comment.text}}</p>
+              <p class="text-sm text-gray-400">&nbsp;&nbsp;User : {{ comment.user }}</p>
+              <p class="text-sm text-gray-700">&nbsp;&nbsp;&nbsp;&nbsp;{{ comment.text }}</p>
             </div>
 
             <!-- ✅ ปุ่มดูเพิ่มเติม -->
@@ -416,51 +409,72 @@ function sendSeniorAnswer(postId) {
           </div>
 
           <div class="flex gap-2 mt-3 relative">
-            <!-- ปุ่มให้คะแนน -->
-          <button
-            @click="reviewShow(post.id)"
-            class="px-3 py-1 text-xs font-medium rounded-full transition duration-150 shadow-sm text-black"
-            :class="getUserPostRating(post)
-              ? 'bg-yellow-300 hover:bg-yellow-400'
-              : 'bg-orange-200 hover:bg-orange-300'"
-          >
-            <template v-if="getUserPostRating(post)">
-              คุณให้ {{ getEmoji(getUserPostRating(post)) }}
-            </template>
-            <template v-else>
-              ให้คะแนน
-            </template>
-          </button>
+  <!-- ปุ่มให้คะแนน -->
+  <button
+    @click="reviewShow(post.id)"
+    class="px-3 py-1 text-xs font-medium rounded-full transition duration-150 shadow-sm text-black"
+    :class="getUserPostRating(post)
+      ? 'bg-yellow-300 hover:bg-yellow-400'
+      : 'bg-orange-200 hover:bg-orange-300'"
+  >
+    <template v-if="getUserPostRating(post)">
+      คุณให้ {{ getEmoji(getUserPostRating(post)) }}
+    </template>
+    <template v-else>
+      ให้คะแนน
+    </template>
+  </button>
 
-            <!-- ✅ กล่องให้คะแนน (อยู่ในแต่ละโพสต์) -->
-            <div v-if="isReview && reviewType === 'post' && reviewTargetId === post.id"
-              class="absolute left-28 bottom-0 bg-white rounded-xl shadow-lg border border-gray-300 px-4 py-3 flex flex-col items-center animate-fade z-10">
-              <h1 class="text-sm font-semibold text-gray-700 mb-1">ให้กี่ดาว?</h1>
+  <!-- ✅ กล่องให้คะแนน -->
+  <div
+    v-if="isReview && reviewType === 'post' && reviewTargetId === post.id"
+    class="absolute left-28 bottom-0 bg-white rounded-xl shadow-lg border border-gray-300 px-4 py-3 flex flex-col items-center animate-fade z-10"
+  >
+    <h1 class="text-sm font-semibold text-gray-700 mb-1">ให้กี่ดาว?</h1>
 
-              <div v-if="!hasSelected" class="flex space-x-2">
-                <button v-for="star in 5" :key="star" @click="selectStar(star)"
-                  class="text-2xl hover:scale-125 transition-transform duration-150 mx-1">
-                  {{ getEmoji(star) }}
-                </button>
-              </div>
+    <div v-if="!hasSelected" class="flex space-x-2">
+      <button
+        v-for="star in 5"
+        :key="star"
+        @click="selectStar(star)"
+        class="text-2xl hover:scale-125 transition-transform duration-150 mx-1"
+      >
+        {{ getEmoji(star) }}
+      </button>
+    </div>
 
-              <div v-else class="text-xs text-gray-800 font-bold mt-1">
-                คุณให้ {{ getEmoji(selectedStar) }}
-              </div>
+    <div v-else class="text-xs text-gray-800 font-bold mt-1">
+      คุณให้ {{ getEmoji(selectedStar) }}
+    </div>
 
-              <button @click="closeReview"
-                class="mt-2 px-3 py-1 text-xs font-medium bg-gray-300 rounded-md hover:bg-gray-400 transition duration-150 shadow-sm">
-                ปิด
-              </button>
-            </div>
+    <button
+      @click="closeReview"
+      class="mt-2 px-3 py-1 text-xs font-medium bg-gray-300 rounded-md hover:bg-gray-400 transition duration-150 shadow-sm"
+    >
+      ปิด
+    </button>
+  </div>
 
-            <!-- ปุ่มตอบคำถาม -->
-            <button @click="openPostPopup(post.id)"
-              class="px-3 py-1 text-xs font-medium bg-red-500 hover:bg-red-600 transition duration-150 shadow-md rounded-full text-black">
-              ตอบคำถาม
-            </button>
-          </div>
+  <!-- ปุ่มตอบคำถาม -->
+  <button
+    @click="openPostPopup(post.id)"
+    class="px-3 py-1 text-xs font-medium bg-red-500 hover:bg-red-600 transition duration-150 shadow-md rounded-full text-black"
+  >
+    ตอบคำถาม
+  </button>
+
+  <!-- ✅ ปุ่มจัดการโพสต์ อยู่ข้างกันแล้ว -->
+  <button
+    v-if="post.email === getEmail() "
+    @click="userRequestShow"
+    class="px-3 py-1 text-xs font-medium bg-blue-900 hover:bg-blue-950 text-black rounded-full transition duration-150 shadow-sm"
+  >
+    จัดการโพสต์
+  </button>
+  <userRequest v-if="isUserRequest && post.email === getEmail()"/>
+</div>
         </div>
+
 
 
         <!-- ปุ่มลอย -->
@@ -476,10 +490,10 @@ function sendSeniorAnswer(postId) {
         </button>
         <!--<button class="fixed right-12 bottom-40 w-15 h-15 shadow-2xl rounded-full" @click="cartShow">
           <v-icon size="28" color="black">mdi-cart</v-icon>
-        </button>-->x
+        </button>-->
 
       </div>
     </main>
   </div>
-  
+
 </template>

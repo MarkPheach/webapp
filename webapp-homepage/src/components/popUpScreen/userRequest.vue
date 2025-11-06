@@ -99,16 +99,10 @@ function editRequest() {
   <div
     v-for="userRequest in userRequests"
     :key="userRequest.id"
-    class="px-5 py-3 bg-white rounded-2xl border border-sky-100 shadow-md hover:shadow-lg transition-all duration-200 mt-5"
+    class="float px-1 py-1 shadow-md hover:shadow-lg transition-all duration-200"
   >
-    <h2 class="text-lg font-semibold text-sky-700">
-      📘 {{ userRequest.name }} - หัวข้อ: {{ userRequest.title }}
-    </h2>
-    <p class="text-sm text-gray-600 mt-1">
-      {{ userRequest.detail }}
-    </p>
 
-    <div class="flex gap-3 mt-3">
+    <div class="flex gap-3">
       <button
         @click="editShow(userRequest)"
         class="px-4 py-1.5 text-sm font-medium bg-gradient-to-r from-blue-500 to-sky-600 text-white rounded-lg hover:from-blue-600 hover:to-sky-700 transition-all duration-200 shadow-sm"
