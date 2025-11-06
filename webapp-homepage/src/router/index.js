@@ -21,4 +21,16 @@ const router = createRouter({
   routes
 })
 
+// ✅ เพิ่มส่วนนี้หลัง createRouter()
+router.beforeEach((to, from, next) => {
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'
+  const publicPages = ['/login', '/signup']
+
+  if (!publicPages.includes(to.path) && !isLoggedIn) {
+    next('/login')
+  } else {
+    next()
+  }
+})
+
 export default router

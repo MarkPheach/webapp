@@ -1,23 +1,31 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
+import { usePost } from '../stores/post';
+import { useUserRequest } from '../stores/request';
 import cart from './popUpScreen/cart.vue';
 import post from './popUpScreen/post.vue';
 import request from './popUpScreen/request.vue';
 import userRequest from './popUpScreen/userRequest.vue';
-import { storeToRefs } from 'pinia';
-import { usePost } from '../stores/post';
-import { useUserRequest } from '../stores/request';
 
+// --- Popup / UI ---
 const isCart = ref(false);
 const isPost = ref(false);
 const isRequest = ref(false);
 const isAdmin = ref(true);
 const isUserRequest = ref(false);
 
-const { posts } = storeToRefs(usePost());
+// --- Store ---
+const postStore = usePost();
+const { posts } = storeToRefs(postStore);
 const { userRequests } = storeToRefs(useUserRequest());
 
-// popup ต่าง ๆ
+// --- ดึงข้อมูลเมื่อ mount ---
+onMounted(() => {
+  postStore.fetchPosts();
+});
+
+// --- Popup / Review ---
 const isReview = ref(false);
 const isComment = ref(false);
 
@@ -43,7 +51,26 @@ const currentPost = computed(() => {
   return null;
 });
 
-// --- เปิด popup ให้คะแนน (ใช้ร่วมได้ทั้งโพสต์/คอมเมนต์) ---
+function formatComment(comment) {
+  // ดึง studentID จาก localStorage
+  const storedUser = JSON.parse(localStorage.getItem("userDetail") || "{}");
+  const studentID = storedUser.studentID || "anonymous";
+
+  // ดึง key จาก object comment
+  const key = Object.keys(comment)[0]; // เช่น "12345 (06/11/2025 15:36)"
+  const text = comment[key];           // ข้อความ
+
+  // ดึงเวลาออกจาก key
+  const timeMatch = key.match(/\((.*?)\)/); // ดึงข้อความในวงเล็บ
+  const timeString = timeMatch ? timeMatch[1] : "";
+
+  // คืนค่า studentID จาก localStorage + เวลา + ข้อความ
+  return `${studentID} (${timeString}): ${text}`;
+}
+
+
+
+// --- ฟังก์ชัน popup review ---
 function openReview(type, id) {
   reviewType.value = type;
   reviewTargetId.value = id;
@@ -52,27 +79,21 @@ function openReview(type, id) {
   selectedStar.value = 0;
 }
 
-// --- ระบบปิด popup ---
 function closeReview() {
   isReview.value = false;
   reviewType.value = null;
   reviewTargetId.value = null;
 }
 
-function userRequestShow() {
-  isUserRequest.value = !isUserRequest.value;
-}
-
 function reviewShow(postId) {
   openReview('post', postId);
 }
 
-// ✅ เปลี่ยนฟังก์ชันนี้ให้ใช้ key ไม่ซ้ำกันระหว่างโพสต์
 function reviewCommentShow(postId, commentIndex) {
   openReview('comment', `${postId}-${commentIndex}`);
 }
 
-// --- toggle popup ---
+// --- Toggle popup ---
 function cartShow() {
   isCart.value = !isCart.value;
   isPost.value = false;
@@ -88,48 +109,64 @@ function requestShow() {
   isPost.value = false;
   isCart.value = false;
 }
-function formatTime(dateString) {
-  const date = new Date(dateString);
-  return date.toLocaleString('th-TH', {
-    dateStyle: 'short',
-    timeStyle: 'short'
-  });
+function userRequestShow() {
+  isUserRequest.value = !isUserRequest.value;
 }
 
-// ระบบให้คะแนน
+// --- Format Time ---
+function formatTime(date) {
+  if (!date) return '';
+  const d = date.toDate ? date.toDate() : new Date(date);
+  return d.toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'short' });
+}
+
+// --- ระบบให้คะแนน ---
 const selectedStar = ref(0);
 const hasSelected = ref(false);
 
 function selectStar(star) {
   const key = `${reviewType.value}-${reviewTargetId.value}`;
 
-  // ✅ ถ้ากดซ้ำดาวเดิม -> ลบดาวออก
+  // ถ้ากดซ้ำดาวเดิม -> ลบดาวออก
   if (ratings.value[key] === star) {
     delete ratings.value[key];
     selectedStar.value = 0;
     hasSelected.value = false;
+
+    if (reviewType.value === 'post') {
+      postStore.updatePostRating(reviewTargetId.value, 'anonymous', 0);
+    } else if (reviewType.value === 'comment') {
+      const [postId, commentIndex] = reviewTargetId.value.split('-');
+      postStore.updateCommentRating(postId, commentIndex, 'anonymous', 0);
+    }
   } else {
-    // ✅ ถ้ายังไม่เคยให้ หรือให้ดาวอื่นอยู่ -> ให้ดาวใหม่
+    // ให้ดาวใหม่
     ratings.value[key] = star;
     selectedStar.value = star;
     hasSelected.value = true;
+
+    if (reviewType.value === 'post') {
+      postStore.updatePostRating(reviewTargetId.value, 'anonymous', star);
+    } else if (reviewType.value === 'comment') {
+      const [postId, commentIndex] = reviewTargetId.value.split('-');
+      postStore.updateCommentRating(postId, commentIndex, 'anonymous', star);
+    }
   }
 }
 
-
 function getEmoji(star) {
   const emojis = ['⭐1', '⭐2', '⭐3', '⭐4', '⭐5'];
-  return emojis[star - 1];
+  return emojis[star - 1] || '';
 }
 
-// คำตอบรุ่นพี่
+// --- คำตอบรุ่นพี่ ---
 function getSeniorAnswer(postId) {
   if (!seniorAnswers.value[postId]) seniorAnswers.value[postId] = [];
   return seniorAnswers.value[postId];
 }
 
 function getSeniorAnswerCount(postId) {
-  return seniorAnswerCount.value[postId] ?? 67;
+  return seniorAnswerCount.value[postId] ?? 0;
 }
 
 function openPostPopup(postId) {
@@ -145,11 +182,11 @@ function closePostPopup() {
 function sendSeniorAnswer(postId) {
   const answer = answerInput.value.trim();
   if (!postId || !answer.length) return;
-  usePost().addComment(postId, answer);
-
+  postStore.addComment(postId, answer);
   answerInput.value = '';
 }
 </script>
+
 
 <template>
   <div>
@@ -217,7 +254,8 @@ function sendSeniorAnswer(postId) {
             class="flex-grow overflow-y-auto bg-gradient-to-br from-slate-50 to-slate-100 p-3 rounded-lg mb-3 border border-gray-200">
             <div v-for="(answer, index) in currentPost.comment" :key="index"
               class="mb-3 p-3 bg-white rounded-xl shadow-sm border-l-4 border-blue-700">
-              <p class="text-gray-800 text-sm whitespace-pre-wrap">&nbsp;&nbsp;&nbsp;{{ answer }}</p>
+              <p class="text-sm text-gray-400">&nbsp;&nbsp;User : {{answer.user}}</p>
+              <p class="text-sm text-gray-700">&nbsp;&nbsp;&nbsp;&nbsp;{{answer.text}}</p>
               <button @click="reviewCommentShow(activePostId, index)"
                 class="px-3 py-1 text-xs font-medium rounded-full transition duration-150 shadow-sm text-gray-800"
                 :class="ratings[`comment-${activePostId}-${index}`]
@@ -329,7 +367,8 @@ function sendSeniorAnswer(postId) {
           <div class="bg-slate-50 rounded-lg border border-gray-200 px-3 py-2 mb-3">
             <div v-for="(comment, index) in post.comment.slice(0, 3)" :key="index"
               class="mb-2 p-2 bg-white rounded-lg shadow-sm border-l-4 border-sky-400">
-              <p class="text-sm text-gray-800">&nbsp;&nbsp;{{ comment }}</p>
+              <p class="text-sm text-gray-400">&nbsp;&nbsp;User : {{comment.user}}</p>
+              <p class="text-sm text-gray-700">&nbsp;&nbsp;&nbsp;&nbsp;{{comment.text}}</p>
             </div>
 
             <!-- ✅ ปุ่มดูเพิ่มเติม -->

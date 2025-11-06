@@ -5,7 +5,8 @@ import { useUserStore } from '../stores/User.js';
 import LoginSlider from "../components/LoginSlider.vue";
 import { auth, db } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, collection } from "firebase/firestore";
+
 
 // slides ที่ส่งให้ LoginSlider
 const slides = [
@@ -46,11 +47,17 @@ const updatedsignupuser = async (e) => {
     const uid = userCredential.user.uid;
 
     // เก็บข้อมูลเพิ่มเติมใน Firestore
-    await setDoc(doc(db, "users", uid), {
-      id: user.userid,
-      email: user.useremail,
-      fact: user.userfact,
-    });
+// เก็บข้อมูลเพิ่มเติมใน Firestore (แบบมี subcollection)
+    await setDoc(
+      doc(collection(db, `users/${uid}/userDetail`), "info"),
+      {
+        email: user.useremail,
+        studentID: user.userid,
+        major: user.userfact,
+        role: "เด็กกระโปก"
+      }
+    );
+
 
     alert("สมัครสมาชิกเรียบร้อย!");
     

@@ -4,6 +4,9 @@ import { useRouter } from "vue-router"
 import { signInWithEmailAndPassword } from "firebase/auth"
 import { auth } from "../firebase"
 import LoginSlider from "../components/LoginSlider.vue"
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
+
 
 const router = useRouter()
 const email = ref("")
@@ -22,20 +25,35 @@ const slides = ref([
 ])
 
 const login = async () => {
-  errorMsg.value = ""
+  errorMsg.value = "";
   try {
     const userCredential = await signInWithEmailAndPassword(
       auth,
       email.value,
       password.value
-    )
-    console.log("✅ Logged in:", userCredential.user)
-    router.push("/HomePage") // เปลี่ยนหน้าเมื่อเข้าสู่ระบบสำเร็จ
+    );
+
+    const uid = userCredential.user.uid;
+
+    // 📥 ดึงข้อมูล userDetail จาก Firestore
+    const docRef = doc(db, `users/${uid}/userDetail/info`);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      console.log("✅ User data:", docSnap.data());
+      // 👉 ตัวอย่าง: บันทึกข้อมูลผู้ใช้ลง localStorage หรือ Pinia store
+      localStorage.setItem("userDetail", JSON.stringify(docSnap.data()));
+    } else {
+      console.warn("⚠️ ไม่มีข้อมูล userDetail ใน Firestore");
+    }
+    localStorage.setItem("isLoggedIn", "true");
+    router.push("/HomePage");
   } catch (error) {
-    console.error("❌ Login failed:", error.message)
-    errorMsg.value = "เข้าสู่ระบบไม่สำเร็จ: " + error.message
+    console.error("❌ Login failed:", error.message);
+    errorMsg.value = "เข้าสู่ระบบไม่สำเร็จ: " + error.message;
   }
-}
+};
+
 </script>
 
 <template>

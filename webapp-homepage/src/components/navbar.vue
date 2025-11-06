@@ -3,10 +3,20 @@ import { ref } from "vue";
 import "primeicons/primeicons.css";
 import { storeToRefs } from "pinia";
 import { useUserDummy } from "../stores/userDummy";
+import { useRouter } from "vue-router"; // ✅ เพิ่มบรรทัดนี้
 
 const userDummyStore = useUserDummy();
 const showDropdown = ref(false);
+const router = useRouter(); // ✅ เพิ่มตัว router
+
+// ✅ ฟังก์ชัน Logout
+const logout = () => {
+  localStorage.removeItem("isLoggedIn"); // ลบสถานะล็อกอิน
+  localStorage.removeItem("userDetail"); // ลบข้อมูลผู้ใช้ (ถ้ามี)
+  router.push("/login"); // กลับไปหน้า login
+};
 </script>
+
 
 <template>
   <header
@@ -35,13 +45,13 @@ const showDropdown = ref(false);
         <span> {{ userDummyStore.userDummys[0].point }} </span>
       </div>
 
-      <router-link to="/login">
-        <button
-          class="bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl px-5 py-2 shadow-md transition-all duration-200"
-        >
-          Logout
-        </button>
-      </router-link>
+    <button
+      @click="logout"
+      class="bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl px-5 py-2 shadow-md transition-all duration-200"
+    >
+      Logout
+    </button>
+
     </div>
   </header>
 </template>

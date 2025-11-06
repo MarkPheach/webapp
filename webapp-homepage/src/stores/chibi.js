@@ -1,40 +1,23 @@
+// src/stores/chibi.js
 import { defineStore } from "pinia";
-import { ref, computed } from "vue";
+import { ref, onMounted } from "vue";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase.js";
 
 export const useChibi = defineStore("chibi", () => {
-    const chibis = ref([
-        {
-            id: 1,
-            name: "Mutsumi with Clubcumber",
-            image: "../../public/chibi/Mutsumi.gif",
-            state: "ซื้อ",
-            price: 50,
-            type: "chibi",
-        },
-        {
-            id: 2,
-            name: "adventer",
-            image: "/public/chibi/adventer.gif",
-            state: "ซื้อ",
-            price: 50,
-            type: "chibi",
-        },
-        {
-            id: 3,
-            name: "chibi-tachyon",
-            image: "/public/chibi/chibi-tachyon.gif",
-            state: "ซื้อ",
-            price: 50,
-            type: "chibi",
-        },
-        {
-            id: 4,
-            name: "uma-musume-haru-urara",
-            image: "/public/chibi/uma-musume-haru-urara.gif",
-            state: "ซื้อ",
-            price: 50,
-            type: "chibi",
-        },
-    ]);
-    return { chibis };
+  const chibis = ref([]);
+
+  // 📥 ฟังก์ชันดึงข้อมูลจาก Firestore
+  async function fetchChibis() {
+    const querySnapshot = await getDocs(collection(db, "chibis"));
+    chibis.value = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+  }
+
+  // 🔁 ดึงข้อมูลอัตโนมัติเมื่อ store ถูกใช้ครั้งแรก
+  onMounted(fetchChibis);
+
+  return { chibis, fetchChibis };
 });
