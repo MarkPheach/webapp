@@ -1,29 +1,53 @@
 <script setup>
 import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
-import { useUserDummy } from '../../stores/userDummy';
-import { useRequest } from '../../stores/request';
 import { useSubject } from "../../stores/subject";
+import { collection, addDoc,setDoc, serverTimestamp } from "firebase/firestore";
+import { auth, db } from "../../firebase";
+import { usePost } from "../../stores/post";
+const { isPost, togglePost, insertPost } = usePost();
 
-const { userDummys } = storeToRefs(useUserDummy());
 const { subjects } = storeToRefs(useSubject());
 const isConfirm = ref(false);
 const inputTitle = ref('');
 const inputDetail = ref('');
 
+function getEmail() {
+    const storedUser = JSON.parse(localStorage.getItem("userDetail") || "{}");
+    const email = storedUser.email || "anonymous";
+    return email;
+}
+
+function getStdID() {
+  const storedUser = JSON.parse(localStorage.getItem("userDetail") || "{}");
+  const studentID = storedUser.studentID || "anonymous";
+  return studentID;
+}
 // การโพสต์
-const handleAddPost = () => {
-    const newRequest = {
-        name: userDummys.value[0].name,
+const handleAddPost = async () => {
+  try {
+    const postRef = collection(db, "posts");
+
+    const newPost = {
+        email: getEmail(),
+        studentID: getStdID(),
         title: inputTitle.value,
         detail: inputDetail.value,
-        createdAt: new Date().toISOString(), // ✅ แก้ให้ตรง
+        createdAt: serverTimestamp(), // เวลาจาก server
+        comment: [], // ✅ array ว่าง
+        ratings: []  // ✅ array ว่าง
     };
 
+    await addDoc(postRef, newPost);
 
-    useRequest().addRequest(newRequest);
     inputTitle.value = '';
     inputDetail.value = '';
+    isConfirm.value = false;
+    alert("โพสต์เรียบร้อยแล้ว ✅");
+  } catch (error) {
+    console.error("Error adding document: ", error);
+    alert("เกิดข้อผิดพลาดในการโพสต์ ❌");
+  }
 };
 
 function confirmShow() {
@@ -51,39 +75,49 @@ function confirmShow() {
     <!-- กล่องโพสต์หลัก -->
     <div
         class="min-h-100 min-w-150 bg-gradient-to-br from-gray-50 to-gray-200 rounded-2xl shadow-2xl flex flex-col items-center fixed left-190 top-30 p-6 overflow-y-auto">
-        <div v-for="userDummy in userDummys" :key="userDummy.id"
-            class="w-11/12 my-4 p-5 bg-white rounded-2xl shadow-md border border-gray-200 hover:shadow-lg transition-all duration-200">
-            <h2 class="text-2xl font-semibold text-blue-900">{{ userDummy.name }}</h2>
-            <p class="text-sm text-gray-500 mb-4">รหัสนิสิต: {{ userDummy.StdID }}</p>
+    <div
+        class="w-11/12 my-4 p-5 bg-white rounded-2xl shadow-md border border-gray-200 hover:shadow-lg transition-all duration-200"
+    >
+        <h2 class="text-2xl font-semibold text-blue-900">
+        {{ getEmail() || "ไม่พบชื่อผู้ใช้" }}
+        </h2>
+        <p class="text-sm text-gray-500 mb-4">
+        รหัสนิสิต: {{ getStdID() || "N/A" }}
+        </p>
 
+        <div class="flex flex-col gap-3">
+        <select
+            v-model="inputTitle"
+            class="h-12 w-full bg-gray-50 border border-gray-300 rounded-lg px-3 text-gray-700 focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition"
+        >
+            <option disabled value="">เลือกหัวข้อ (Select Title)</option>
+            <option v-for="subject in subjects" :key="subject.name" :value="subject.name">
+            {{ subject.name }}
+            </option>
+        </select>
 
-            <div class="flex flex-col gap-3">
-                <select v-model="inputTitle"
-                    class="h-12 w-full bg-gray-50 border border-gray-300 rounded-lg px-3 text-gray-700 focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition">
-                    <option disabled value="">เลือกหัวข้อ (Select Title)</option>
-                    <option v-for="subject in subjects" :key="subject.name" :value="subject.name">
-                        {{ subject.name }}
-                    </option>
-                </select>
-
-                <textarea v-model="inputDetail" placeholder="รายละเอียดเพิ่มเติม (Detail)" rows="3"
-                    class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition"></textarea>
-            </div>
-
-            <div class="flex justify-end gap-3 mt-4">
-                <button @click="confirmShow"
-                    class="px-4 py-2 text-sm font-medium bg-blue-900 text-black rounded-lg hover:bg-blue-950 transition duration-200 shadow-md">
-                    💬 โพสต์
-                </button>
-                <button
-                    class="px-4 py-2 text-sm font-medium bg-gray-500 text-black rounded-lg hover:bg-gray-600 transition duration-200 shadow-md">
-                    🗙 ไม่โพสต์
-                </button>
-            </div>
+        <textarea
+            v-model="inputDetail"
+            placeholder="รายละเอียดเพิ่มเติม (Detail)"
+            rows="3"
+            class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition"
+        ></textarea>
         </div>
 
-        <div v-if="userDummys.length === 0" class="text-gray-500 mt-10">
-            <p>ไม่มีรายการคำขอในขณะนี้</p>
+        <div class="flex justify-end gap-3 mt-4">
+        <button
+            @click="confirmShow"
+            class="px-4 py-2 text-sm font-medium bg-blue-900 text-black rounded-lg hover:bg-blue-950 transition duration-200 shadow-md"
+        >
+            💬 โพสต์
+        </button>
+        <button
+            @click="togglePost"
+            class="px-4 py-2 text-sm font-medium bg-gray-500 text-black rounded-lg hover:bg-gray-600 transition duration-200 shadow-md"
+        >
+            🗙 ไม่โพสต์
+        </button>
         </div>
+    </div>
     </div>
 </template>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { usePost } from '../stores/post';
 import { useUserRequest } from '../stores/request';
@@ -7,9 +7,9 @@ import post from './popUpScreen/post.vue';
 import request from './popUpScreen/request.vue';
 import userRequest from './popUpScreen/userRequest.vue';
 import { get } from 'firebase/database';
+const { isPost, togglePost } = usePost();
 
 // --- Popup / UI ---
-const isPost = ref(false);
 const isAdmin = ref(true);
 const isUserRequest = ref(false);
 const isRequest = ref(false);
@@ -74,8 +74,6 @@ function getEmail() {
   return email;
 }
 
-
-
 // --- ฟังก์ชัน popup review ---
 function openReview(type, id) {
   reviewType.value = type;
@@ -97,19 +95,6 @@ function reviewShow(postId) {
 
 function reviewCommentShow(postId, commentIndex) {
   openReview('comment', `${postId}-${commentIndex}`);
-}
-
-// --- Toggle popup ---
-function postShow() {
-  isPost.value = !isPost.value;
-  isRequest.value = false;
-}
-function requestShow() {
-  isRequest.value = !isRequest.value;
-  isPost.value = false;
-}
-function userRequestShow() {
-  isUserRequest.value = !isUserRequest.value;
 }
 
 // --- Format Time ---
@@ -231,8 +216,7 @@ function sendSeniorAnswer(postId) {
 
 <template>
   <div>
-    <post v-if="isPost" />
-    <request v-if="isRequest" @close="isRequest = false" :post-id="selectedPostId" />
+    <post v-if="postStore.isPost" />
     <!-- ✅ POPUP คำตอบรุ่นพี่ -->
     <div v-if="activePostId !== null"
       class="fixed inset-0 flex items-center justify-center z-[999] bg-black/50 backdrop-blur-sm">
@@ -480,14 +464,14 @@ function sendSeniorAnswer(postId) {
         <!-- ปุ่มลอย -->
         <button
           class="fixed right-15 bottom-10 w-15 h-15 bg-blue-900 text-white flex items-center justify-center shadow-2xl rounded-full hover:bg-blue-950 transition"
-          @click="postShow">
+          @click="togglePost">
           <v-icon size="28" color="black">mdi-pencil</v-icon>
         </button>
-        <button v-if="isAdmin"
+        <!--<button v-if="isAdmin"
           class="fixed right-15 bottom-30 w-15 h-15 bg-blue-900 text-white flex items-center justify-center shadow-2xl rounded-full hover:bg-blue-950 transition"
           @click="requestShow">
           <v-icon size="28" color="black">mdi-account-box</v-icon>
-        </button>
+        </button>-->
         <!--<button class="fixed right-12 bottom-40 w-15 h-15 shadow-2xl rounded-full" @click="cartShow">
           <v-icon size="28" color="black">mdi-cart</v-icon>
         </button>-->

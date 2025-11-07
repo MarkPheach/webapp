@@ -1,3 +1,4 @@
+// src/stores/post.js
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import {
@@ -15,6 +16,11 @@ import { db } from "../firebase.js";
 
 export const usePost = defineStore("post", () => {
   const posts = ref([]);
+  const isPost = ref(false); // ✅ state สำหรับเปิด/ปิดโพสต์
+
+  const togglePost = () => {
+    isPost.value = !isPost.value;
+  };
 
   // 📥 ดึงโพสต์แบบเรียลไทม์
   const fetchPosts = () => {
@@ -127,6 +133,8 @@ export const usePost = defineStore("post", () => {
   return {
     posts,
     filteredPosts,
+    isPost,
+    togglePost, // ✅ เพิ่มตรงนี้
     fetchPosts,
     insertPost,
     addComment,
