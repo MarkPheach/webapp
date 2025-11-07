@@ -3,6 +3,16 @@ import { ref } from "vue";
 import ProfileFrame from "./popUpShop/ProfileFrame.vue";
 import ThemeWebsite from "./popUpShop/ThemeWebsite.vue";
 import Chibli from "./popUpShop/Chibli.vue";
+import { useChibi } from "../stores/chibi";
+import { onMounted } from "vue";
+
+const chibiStore = useChibi();
+
+onMounted(async () => {
+  await chibiStore.fetchChibis(); // ✅ โหลดข้อมูลจาก Firestore
+  console.log("Chibi loaded:", chibiStore.chibis); // ตรวจว่าโหลดมาจริง
+});
+
 const isProfileFrame = ref(true);
 const isThemeWebsite = ref(false);
 const isChibli = ref(false);

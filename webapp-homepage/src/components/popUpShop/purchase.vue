@@ -28,7 +28,7 @@ const emit = defineEmits(["close"]);
 const userDummyStore = useUserDummy();
 const user = userDummyStore.userDummys[0];
 
-const inventoryStore = useInventoryStore(); // ✅ แก้ชื่อ import ให้ถูกต้อง
+const inventoryStore = useInventoryStore();
 
 // ✅ ปิด popup หลัก
 function closePopup() {
@@ -47,17 +47,35 @@ function acceptShow() {
 
   if (type === "chibi") {
     store = useChibi();
-    found = store.chibis.find((item) => item.name === typeOfPurchase);
+    console.log("🧩 ตรวจสอบ chibis:", store.chibis);
+    found = store.chibis.find((item) =>
+      item.chibi_name?.toLowerCase().includes(typeOfPurchase.toLowerCase())
+    );
   } else if (type === "theme") {
     store = useTheme();
-    found = store.themes.find((item) => item.name === typeOfPurchase);
+    found = store.themes.find((item) =>
+      item.name?.toLowerCase().includes(typeOfPurchase.toLowerCase())
+    );
   } else if (type === "Profileframe") {
     store = useProfileFrameStore();
-    found = store.ProfileFrame.find((item) => item.name === typeOfPurchase);
+    found = store.ProfileFrame.find((item) =>
+      item.name?.toLowerCase().includes(typeOfPurchase.toLowerCase())
+    );
+  }
+
+  console.log("✅ Found item:", found);
+
+  // ❗ ถ้าไม่พบสินค้าใน store
+  if (!found) {
+    messagePopup.value = {
+      text: `❌ ไม่พบสินค้านี้ในระบบ: ${typeOfPurchase}`,
+      type: "error",
+    };
+    return;
   }
 
   // ❗ ถ้ามีสินค้าแล้ว
-  if (found && found.state === "เป็นเจ้าของ") {
+  if (found.state === "เป็นเจ้าของ") {
     messagePopup.value = {
       text: `⚠️ คุณมี "${typeOfPurchase}" อยู่แล้ว!`,
       type: "warning",
@@ -85,13 +103,27 @@ async function confirmPurchase() {
 
   if (type === "chibi") {
     store = useChibi();
-    found = store.chibis.find((item) => item.name === typeOfPurchase);
+    found = store.chibis.find((item) =>
+      item.chibi_name?.toLowerCase().includes(typeOfPurchase.toLowerCase())
+    );
   } else if (type === "theme") {
     store = useTheme();
-    found = store.themes.find((item) => item.name === typeOfPurchase);
+    found = store.themes.find((item) =>
+      item.name?.toLowerCase().includes(typeOfPurchase.toLowerCase())
+    );
   } else if (type === "Profileframe") {
     store = useProfileFrameStore();
-    found = store.ProfileFrame.find((item) => item.name === typeOfPurchase);
+    found = store.ProfileFrame.find((item) =>
+      item.name?.toLowerCase().includes(typeOfPurchase.toLowerCase())
+    );
+  }
+
+  if (!found) {
+    messagePopup.value = {
+      text: `❌ ไม่พบข้อมูลสินค้านี้ในระบบ`,
+      type: "error",
+    };
+    return;
   }
 
   // ✅ หักแต้ม
@@ -99,13 +131,13 @@ async function confirmPurchase() {
   user.point = (currentPoint - itemPrice).toString();
 
   // ✅ เปลี่ยนสถานะเป็นเจ้าของ
-  if (found) found.state = "เป็นเจ้าของ";
+  found.state = "เป็นเจ้าของ";
 
   // ✅ เพิ่มใน inventory
   inventoryStore.addItem({
-    id: found.id,
-    name: found.name,
-    image: found.image || found.src,
+    id: found.id || found.chibi_id || Date.now(),
+    name: found.chibi_name || found.name,
+    image: found.gif || found.image || found.src,
     type: found.type,
     price: found.price,
   });
@@ -130,8 +162,8 @@ async function confirmPurchase() {
     <div
       class="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-lg border border-gray-200 rounded-3xl shadow-2xl w-[380px] h-[330px] flex flex-col items-center p-6 transition-all duration-300 z-40"
     >
-      <h2 class="text-xl font-bold text-gray-800 mb-2 ">🛒 รายการสั่งซื้อ</h2>
- 
+      <h2 class="text-xl font-bold text-gray-800 mb-2">🛒 รายการสั่งซื้อ</h2>
+
       <img
         :src="image || defaultImage"
         alt="Item Image"
