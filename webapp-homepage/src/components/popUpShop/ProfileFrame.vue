@@ -1,122 +1,65 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import purchase from './purchase.vue';
 import { useProfileFrameStore } from '../../stores/profileframe.js';
+
 const profileFrameStore = useProfileFrameStore();
+onMounted(() => profileFrameStore.fetchProfileFrames());
 
-const selectedPurchase = ref('Nikka1')
-const selectedPrice = ref(0)
-const currentState = ref('EROR')
-const selectedsrc = ref('../../assets/Eror.jpg')
-const selectedtype = ref('EROR')
-const isPurchase = ref(false)
+const selectedPurchase = ref('');
+const selectedPrice = ref(0);
+const currentState = ref('');
+const selectedsrc = ref('');
+const selectedtype = ref('');
+const isPurchase = ref(false);
 
-function purchasePopup(name, price, state, src, type) {
-    selectedPurchase.value = name
-    selectedPrice.value = price
-    currentState.value = state
-    selectedsrc.value = src
-    selectedtype.value = type
-    isPurchase.value = !isPurchase.value
+function purchasePopup(item) {
+  selectedPurchase.value = item.name;
+  selectedPrice.value = item.price;
+  currentState.value = item.state;
+  selectedsrc.value = item.src;
+  selectedtype.value = item.type;
+  isPurchase.value = true;
 }
 </script>
 
+
 <template>
-  <div>
-    <!-- โปรไฟล์เฟรมทั้งหมด -->
-    <div>
-      <button
-        @click="purchasePopup(profileFrameStore.ProfileFrame[0].name, profileFrameStore.ProfileFrame[0].price, profileFrameStore.ProfileFrame[0].state, profileFrameStore.ProfileFrame[0].src, profileFrameStore.ProfileFrame[0].type)">
+  <div v-if="profileFrameStore.profileFrames.length > 0">
+
+    <div v-for="(item, index) in profileFrameStore.profileFrames" :key="item.id">
+      <button @click="purchasePopup(item)">
         <v-card
-          class="absolute left-22 top-10 w-[180px] h-[200px] bg-white rounded-xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition"
+          class="absolute w-[180px] h-[200px] bg-white rounded-xl shadow-lg p-4 flex flex-col items-center
+                 hover:scale-105 transition"
+          :class="[
+            index === 0 ? 'left-22 top-10' :
+            index === 1 ? 'left-88 bottom-41.5' :
+            index === 2 ? 'left-152 bottom-93' :
+            index === 3 ? 'left-218 bottom-144.5' : ''
+          ]"
           elevation="4">
+
           <div class="flex justify-center mb-2">
-            <v-img src="public/images/Profileframe1.png" alt="กรอบโปรไฟล์" width="80" height="80" contain
-              class="rounded-full mb-2"></v-img>
+            <v-img :src="item.src" width="80" height="80" contain class="rounded-full mb-2"></v-img>
           </div>
+
           <p class="text-center font-bold text-sm mb-2">
-            กรอบโปรไฟล์ : {{ profileFrameStore.ProfileFrame[0].name }}
+            กรอบโปรไฟล์ : {{ item.name }}
           </p>
+
           <div class="flex items-center justify-center gap-1">
             <v-icon color="amber" size="22">mdi-cash</v-icon>
-            <span class="font-bold text-base">{{ profileFrameStore.ProfileFrame[0].price }}</span>
+            <span class="font-bold text-base">{{ item.price }}</span>
           </div>
-          <div>{{ profileFrameStore.ProfileFrame[0].state }}</div>
+
+          <div>{{ item.state }}</div>
+
         </v-card>
       </button>
     </div>
 
-    <!-- โปรไฟล์เฟรม 2 -->
-    <div>
-      <button
-        @click="purchasePopup(profileFrameStore.ProfileFrame[1].name, profileFrameStore.ProfileFrame[1].price, profileFrameStore.ProfileFrame[1].state, profileFrameStore.ProfileFrame[1].src, profileFrameStore.ProfileFrame[1].type)">
-        <v-card
-          class="absolute left-88 bottom-41.5 w-[180px] h-[200px] bg-white rounded-xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition"
-          elevation="4">
-          <div class="flex justify-center mb-2">
-            <v-img src="public/images/Profileframe2.png" alt="กรอบโปรไฟล์" width="80" height="80" contain
-              class="rounded-full mb-2"></v-img>
-          </div>
-          <p class="text-center font-bold text-sm mb-2">
-            กรอบโปรไฟล์ : {{ profileFrameStore.ProfileFrame[1].name }}
-          </p>
-          <div class="flex items-center justify-center gap-1">
-            <v-icon color="amber" size="22">mdi-cash</v-icon>
-            <span class="font-bold text-base">{{ profileFrameStore.ProfileFrame[1].price }}</span>
-          </div>
-          <div>{{ profileFrameStore.ProfileFrame[1].state }}</div>
-        </v-card>
-      </button>
-    </div>
-
-    <!-- โปรไฟล์เฟรม 3 -->
-    <div>
-      <button
-        @click="purchasePopup(profileFrameStore.ProfileFrame[2].name, profileFrameStore.ProfileFrame[2].price, profileFrameStore.ProfileFrame[2].state, profileFrameStore.ProfileFrame[2].src, profileFrameStore.ProfileFrame[2].type)">
-        <v-card
-          class="absolute left-152 bottom-93 w-[180px] h-[200px] bg-white rounded-xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition"
-          elevation="4">
-          <div class="flex justify-center mb-2">
-            <v-img src="public/images/Profileframe3.png" alt="กรอบโปรไฟล์" width="80" height="80" contain
-              class="rounded-full mb-2"></v-img>
-          </div>
-          <p class="text-center font-bold text-sm mb-2">
-            กรอบโปรไฟล์ : {{ profileFrameStore.ProfileFrame[2].name }}
-          </p>
-          <div class="flex items-center justify-center gap-1">
-            <v-icon color="amber" size="22">mdi-cash</v-icon>
-            <span class="font-bold text-base">{{ profileFrameStore.ProfileFrame[2].price }}</span>
-          </div>
-          <div>{{ profileFrameStore.ProfileFrame[2].state }}</div>
-        </v-card>
-      </button>
-    </div>
-
-    <!-- โปรไฟล์เฟรม 4 -->
-    <div>
-      <button
-        @click="purchasePopup(profileFrameStore.ProfileFrame[3].name, profileFrameStore.ProfileFrame[3].price, profileFrameStore.ProfileFrame[3].state, profileFrameStore.ProfileFrame[3].src, profileFrameStore.ProfileFrame[3].type)">
-        <v-card
-          class="absolute left-218 bottom-144.5 w-[180px] h-[200px] bg-white rounded-xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition"
-          elevation="4">
-          <div class="flex justify-center mb-2">
-            <v-img src="public/images/Profileframe4.png" alt="กรอบโปรไฟล์" width="80" height="80" contain
-              class="rounded-full mb-2"></v-img>
-          </div>
-          <p class="text-center font-bold text-sm mb-2">
-            กรอบโปรไฟล์ : {{ profileFrameStore.ProfileFrame[3].name }}
-          </p>
-          <div class="flex items-center justify-center gap-1">
-            <v-icon color="amber" size="22">mdi-cash</v-icon>
-            <span class="font-bold text-base">{{ profileFrameStore.ProfileFrame[3].price }}</span>
-          </div>
-          <div>{{ profileFrameStore.ProfileFrame[3].state }}</div>
-        </v-card>
-      </button>
-    </div>
-
-    <!-- ✅ Popup พร้อม Transition -->
-    <Transition name="fade" mode="out-in">
+    <Transition name="fade">
       <purchase
         v-if="isPurchase"
         :type-of-purchase="selectedPurchase"
@@ -129,6 +72,7 @@ function purchasePopup(name, price, state, src, type) {
     </Transition>
   </div>
 </template>
+
 
 <style scoped>
 /* ✅ Transition สไตล์เดียวกับ inventory (นุ่ม ลื่น เหมือนเปลี่ยนหมวดหมู่) */

@@ -3,7 +3,7 @@ import { ref, nextTick } from "vue";
 import { storeToRefs } from "pinia";
 import { useCart } from "../../stores/cart";
 import { useChibi } from "../../stores/chibi";
-import { useThemeStore } from "../../stores/theme";
+import { useTheme } from "../../stores/theme";
 import { useProfileFrameStore } from "../../stores/profileframe";
 import { useUserDummy } from "../../stores/userDummy";
 import { useInventoryStore } from "../../stores/inventory";
@@ -49,7 +49,7 @@ function acceptShow() {
     store = useChibi();
     found = store.chibis.find((item) => item.name === typeOfPurchase);
   } else if (type === "theme") {
-    store = useThemeStore();
+    store = useTheme();
     found = store.themes.find((item) => item.name === typeOfPurchase);
   } else if (type === "Profileframe") {
     store = useProfileFrameStore();
@@ -87,7 +87,7 @@ async function confirmPurchase() {
     store = useChibi();
     found = store.chibis.find((item) => item.name === typeOfPurchase);
   } else if (type === "theme") {
-    store = useThemeStore();
+    store = useTheme();
     found = store.themes.find((item) => item.name === typeOfPurchase);
   } else if (type === "Profileframe") {
     store = useProfileFrameStore();

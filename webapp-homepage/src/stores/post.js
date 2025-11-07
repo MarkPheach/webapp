@@ -1,6 +1,7 @@
 // src/stores/post.js
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
+import { deleteDoc } from "firebase/firestore";
 import {
   collection,
   addDoc,
@@ -98,6 +99,17 @@ export const usePost = defineStore("post", () => {
     }
   };
 
+  const deletePost = async (postId) => {
+  try {
+    const postRef = doc(db, "posts", postId);
+    await deleteDoc(postRef);
+    console.log("✅ ลบโพสต์สำเร็จ", postId);
+  } catch (err) {
+    console.error("❌ deletePost error:", err);
+  }
+};
+
+
   // 💫 ให้ดาวคอมเมนต์
   const updateCommentRating = async (postId, commentIndex, userId, star) => {
     try {
@@ -134,11 +146,13 @@ export const usePost = defineStore("post", () => {
     posts,
     filteredPosts,
     isPost,
-    togglePost, // ✅ เพิ่มตรงนี้
+    togglePost,
     fetchPosts,
     insertPost,
     addComment,
     updatePostRating,
     updateCommentRating,
+    deletePost, // ✅ เพิ่มที่นี่
   };
+
 });

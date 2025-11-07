@@ -6,6 +6,7 @@ import LoginSlider from "../components/LoginSlider.vue";
 import { auth, db } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, collection } from "firebase/firestore";
+import Inventory from '../components/Inventory.vue';
 
 
 // slides ที่ส่งให้ LoginSlider
@@ -54,7 +55,9 @@ const updatedsignupuser = async (e) => {
         email: user.useremail,
         studentID: user.userid,
         major: user.userfact,
-        role: "เด็กกระโปก"
+        role: "เด็กกระโปก",
+        point: 0,
+        inventory: []
       }
     );
 

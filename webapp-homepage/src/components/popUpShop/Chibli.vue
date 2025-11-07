@@ -28,7 +28,7 @@ function purchasePopup(chibi) {
 </script>
 
 <template>
-  <div class="flex flex-wrap gap-6">
+  <div class="flex flex-wrap gap-20">
     <div v-for="chibi in chibiStore.chibis" :key="chibi.id">
       <button @click="purchasePopup(chibi)">
         <v-card

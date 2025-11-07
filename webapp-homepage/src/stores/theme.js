@@ -1,38 +1,22 @@
-import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { defineStore } from "pinia";
+import { ref, onMounted } from "vue";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase.js";
 
-export const useThemeStore = defineStore('theme', () => {
-    const themes = ref([
-        {
-            id: 1,
-            name: 'theme1',
-            src: '../../public/images/theme1.jpg',
-            state: "ซื้อ",
-            price: 50,
-            type: "theme",
-            
-        },{
-            id: 2,
-            name: 'theme2',
-            src: '../../public/images/theme2.jpg',
-            state: "ซื้อ",
-            price: 50,
-            type: "theme",
-        },{
-            id: 3,
-            name: 'theme3',
-            src: '../../public/images/theme3.jpg',
-            state: "ซื้อ",
-            price: 50,
-            type: "theme",
-        },{
-            id: 4,
-            name: 'theme4',
-            src: '../../public/images/theme4.jpg',
-            state: "ซื้อ",
-            price: 50,
-            type: "theme",
-        }
-    ]);
-    return { themes };
+export const useTheme = defineStore("theme", () => {
+  const themes = ref([]);
+
+  // 📥 ฟังก์ชันดึงข้อมูลจาก Firestore
+  async function fetchThemes() {
+    const querySnapshot = await getDocs(collection(db, "themes"));
+    themes.value = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+  }
+
+  // 🔁 ดึงข้อมูลอัตโนมัติเมื่อ store ถูกใช้ครั้งแรก
+  onMounted(fetchThemes);
+
+  return { themes, fetchThemes };
 });

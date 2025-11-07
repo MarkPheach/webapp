@@ -51,6 +51,14 @@ const currentPost = computed(() => {
   return null;
 });
 
+function deletePost(postId) {
+  if (!postId) return;
+
+  if (confirm("ต้องการลบโพสต์นี้หรือไม่?")) {
+    postStore.deletePost(postId);
+  }
+}
+
 function formatComment(comment) {
   // ดึง studentID จาก localStorage
   const storedUser = JSON.parse(localStorage.getItem("userDetail") || "{}");
@@ -448,13 +456,24 @@ function sendSeniorAnswer(postId) {
   </button>
 
   <!-- ✅ ปุ่มจัดการโพสต์ อยู่ข้างกันแล้ว -->
-  <button
-    v-if="post.email === getEmail() "
-    @click="userRequestShow"
-    class="px-3 py-1 text-xs font-medium bg-blue-900 hover:bg-blue-950 text-black rounded-full transition duration-150 shadow-sm"
-  >
-    จัดการโพสต์
-  </button>
+  <!-- ปุ่มแก้ไขโพสต์ -->
+<button
+  v-if="post.email === getEmail()"
+  @click="userRequestShow"
+  class="px-3 py-1 text-xs font-medium bg-green-500 hover:bg-green-600 text-black rounded-full transition duration-150 shadow-sm"
+>
+  ✏️ แก้ไขโพสต์
+</button>
+
+<!-- ปุ่มลบโพสต์ -->
+<button
+  v-if="post.email === getEmail()"
+  @click="deletePost(post.id)"
+  class="px-3 py-1 text-xs font-medium bg-red-500 hover:bg-red-600 text-black rounded-full transition duration-150 shadow-sm"
+>
+  🗑️ ลบโพสต์
+</button>
+
   <userRequest v-if="isUserRequest && post.email === getEmail()"/>
 </div>
         </div>
@@ -467,15 +486,6 @@ function sendSeniorAnswer(postId) {
           @click="togglePost">
           <v-icon size="28" color="black">mdi-pencil</v-icon>
         </button>
-        <!--<button v-if="isAdmin"
-          class="fixed right-15 bottom-30 w-15 h-15 bg-blue-900 text-white flex items-center justify-center shadow-2xl rounded-full hover:bg-blue-950 transition"
-          @click="requestShow">
-          <v-icon size="28" color="black">mdi-account-box</v-icon>
-        </button>-->
-        <!--<button class="fixed right-12 bottom-40 w-15 h-15 shadow-2xl rounded-full" @click="cartShow">
-          <v-icon size="28" color="black">mdi-cart</v-icon>
-        </button>-->
-
       </div>
     </main>
   </div>
