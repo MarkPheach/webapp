@@ -57,11 +57,12 @@ function acceptShow() {
       item.name?.toLowerCase().includes(typeOfPurchase.toLowerCase())
     );
   } else if (type === "Profileframe") {
-    store = useProfileFrameStore();
-    found = store.ProfileFrame.find((item) =>
-      item.name?.toLowerCase().includes(typeOfPurchase.toLowerCase())
-    );
-  }
+  store = useProfileFrameStore();
+  found = store.profileFrames.find((item) =>
+    item.name?.toLowerCase().includes(typeOfPurchase.toLowerCase())
+  );
+}
+
 
   console.log("✅ Found item:", found);
 
@@ -112,11 +113,11 @@ async function confirmPurchase() {
       item.name?.toLowerCase().includes(typeOfPurchase.toLowerCase())
     );
   } else if (type === "Profileframe") {
-    store = useProfileFrameStore();
-    found = store.ProfileFrame.find((item) =>
-      item.name?.toLowerCase().includes(typeOfPurchase.toLowerCase())
-    );
-  }
+  store = useProfileFrameStore();
+  found = store.profileFrames.find((item) =>
+    item.name?.toLowerCase().includes(typeOfPurchase.toLowerCase())
+  );
+}
 
   if (!found) {
     messagePopup.value = {
